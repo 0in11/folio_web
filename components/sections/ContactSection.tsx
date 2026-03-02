@@ -1,24 +1,18 @@
-import { Github, Mail, MessageCircle } from "lucide-react";
+import { Github, Mail } from "lucide-react";
 import FadeIn from "@/components/ui/FadeIn";
 
 const contactLinks = [
   {
     label: "Email",
-    href: "mailto:your-email@example.com",
+    href: "mailto:ymyi98@naver.com",
     icon: Mail,
-    value: "your-email@example.com",
+    value: "ymyi98@naver.com",
   },
   {
     label: "GitHub",
-    href: "https://github.com/yourusername",
+    href: "https://github.com/0in11",
     icon: Github,
-    value: "github.com/yourusername",
-  },
-  {
-    label: "Threads",
-    href: "https://threads.net/@yourhandle",
-    icon: MessageCircle,
-    value: "@yourhandle",
+    value: "github.com/0in11",
   },
 ];
 
