@@ -25,9 +25,9 @@
 | Task 12 | Awards, Education & Contact Sections | ✅ 완료 | f026632 |
 | Task 13 | 메인 페이지 조합 (app/page.tsx) | ✅ 완료 | c88b898 |
 | Task 14 | Project Detail Page | ✅ 완료 | 26eda11 |
-| Task 15 | Framer Motion 애니메이션 (절제된 버전) | ⏳ 대기 | - |
-| Task 16 | SEO & 메타데이터 | ⏳ 대기 | - |
-| Task 17 | 실제 연락처 정보 업데이트 | ⏳ 대기 | - |
+| Task 15 | Framer Motion 애니메이션 (절제된 버전) | ✅ 완료 | e554e16 |
+| Task 16 | SEO & 메타데이터 | ✅ 완료 | 0ac83b9 |
+| Task 17 | 실제 연락처 정보 업데이트 | ✅ 완료 | 2ee2d6d |
 | Task 18 | 반응형 & 접근성 최종 검토 | ⏳ 대기 | - |
 
 **범례:** ✅ 완료 | 🔄 진행 중 | ⏳ 대기 | ❌ 실패
