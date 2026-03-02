@@ -22,9 +22,9 @@
 | Task 9 | Career Snapshot Section | ✅ 완료 | 0c2ec8a |
 | Task 10 | About Section | ✅ 완료 | 1140155 |
 | Task 11 | Skills Section | ✅ 완료 | 1a116fe |
-| Task 12 | Awards, Education & Contact Sections | ⏳ 대기 | - |
-| Task 13 | 메인 페이지 조합 (app/page.tsx) | ⏳ 대기 | - |
-| Task 14 | Project Detail Page | ⏳ 대기 | - |
+| Task 12 | Awards, Education & Contact Sections | ✅ 완료 | f026632 |
+| Task 13 | 메인 페이지 조합 (app/page.tsx) | ✅ 완료 | c88b898 |
+| Task 14 | Project Detail Page | ✅ 완료 | 26eda11 |
 | Task 15 | Framer Motion 애니메이션 (절제된 버전) | ⏳ 대기 | - |
 | Task 16 | SEO & 메타데이터 | ⏳ 대기 | - |
 | Task 17 | 실제 연락처 정보 업데이트 | ⏳ 대기 | - |
