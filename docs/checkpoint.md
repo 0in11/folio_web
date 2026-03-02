@@ -3,16 +3,19 @@
 > 구현 진행사항을 추적하는 문서입니다.
 > `docs/plan/implementation-plan.md` 기반으로 진행합니다.
 
+> **워크플로우:** 배치(3개 Task) 완료 후 반드시 `/clear` 로 컨텍스트를 초기화하고 다음 배치를 시작한다.
+> Claude는 배치 완료 보고 시 유저에게 `/clear` 후 진행할 것을 안내해야 한다.
+
 ## 진행 상태 요약
 
 | Task | 이름 | 상태 | 커밋 |
 |------|------|------|------|
 | Task 0 | UV Python 환경 설정 | ✅ 완료 | 21652e6 |
-| Task 1 | Next.js 프로젝트 초기화 | ⏳ 대기 | - |
-| Task 2 | 디자인 토큰 & Tailwind 설정 | ⏳ 대기 | - |
-| Task 3 | Vitest 테스트 환경 설정 | ⏳ 대기 | - |
-| Task 4 | 데이터 파일 정의 | ⏳ 대기 | - |
-| Task 5 | lib 유틸리티 함수 | ⏳ 대기 | - |
+| Task 1 | Next.js 프로젝트 초기화 | ✅ 완료 | ce3ff79 |
+| Task 2 | 디자인 토큰 & Tailwind 설정 | ✅ 완료 | ece0138 |
+| Task 3 | Vitest 테스트 환경 설정 | ✅ 완료 | 9e75778 |
+| Task 4 | 데이터 파일 정의 | ✅ 완료 | feeaf4d |
+| Task 5 | lib 유틸리티 함수 | ✅ 완료 | 08fd3e7 |
 | Task 6 | 폰트 & 레이아웃 (app/layout.tsx) | ⏳ 대기 | - |
 | Task 7 | Hero Section | ⏳ 대기 | - |
 | Task 8 | ProjectCard UI + Selected Projects Section | ⏳ 대기 | - |
