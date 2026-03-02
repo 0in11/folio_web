@@ -19,9 +19,9 @@
 | Task 6 | 폰트 & 레이아웃 (app/layout.tsx) | ✅ 완료 | 24980ad |
 | Task 7 | Hero Section | ✅ 완료 | 2b1b57c |
 | Task 8 | ProjectCard UI + Selected Projects Section | ✅ 완료 | 9cd89f3 |
-| Task 9 | Career Snapshot Section | ⏳ 대기 | - |
-| Task 10 | About Section | ⏳ 대기 | - |
-| Task 11 | Skills Section | ⏳ 대기 | - |
+| Task 9 | Career Snapshot Section | ✅ 완료 | 0c2ec8a |
+| Task 10 | About Section | ✅ 완료 | 1140155 |
+| Task 11 | Skills Section | ✅ 완료 | 1a116fe |
 | Task 12 | Awards, Education & Contact Sections | ⏳ 대기 | - |
 | Task 13 | 메인 페이지 조합 (app/page.tsx) | ⏳ 대기 | - |
 | Task 14 | Project Detail Page | ⏳ 대기 | - |
