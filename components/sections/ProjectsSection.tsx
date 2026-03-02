@@ -1,4 +1,5 @@
 import ProjectCard from "@/components/ui/ProjectCard";
+import FadeIn from "@/components/ui/FadeIn";
 import { getFeaturedProjects, getMoreProjects } from "@/data/projects";
 
 export default function ProjectsSection() {
@@ -9,7 +10,7 @@ export default function ProjectsSection() {
     <section id="projects" className="py-section px-6" aria-labelledby="projects-heading">
       <div className="max-w-content mx-auto">
         {/* Section Header */}
-        <div className="mb-12">
+        <FadeIn className="mb-12">
           <p className="font-mono text-xs text-accent-primary tracking-widest uppercase mb-3">
             Work
           </p>
@@ -19,26 +20,30 @@ export default function ProjectsSection() {
           >
             Selected Projects
           </h2>
-        </div>
+        </FadeIn>
 
         {/* Featured Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-16">
-          {featured.map((project) => (
-            <ProjectCard key={project.id} project={project} featured />
+          {featured.map((project, i) => (
+            <FadeIn key={project.id} delay={i * 0.1}>
+              <ProjectCard project={project} featured />
+            </FadeIn>
           ))}
         </div>
 
         {/* More Projects */}
         {more.length > 0 && (
           <>
-            <div className="mb-6">
+            <FadeIn className="mb-6">
               <h3 className="font-display text-xl font-bold text-text-secondary">
                 More Projects
               </h3>
-            </div>
+            </FadeIn>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-              {more.map((project) => (
-                <ProjectCard key={project.id} project={project} />
+              {more.map((project, i) => (
+                <FadeIn key={project.id} delay={i * 0.08}>
+                  <ProjectCard project={project} />
+                </FadeIn>
               ))}
             </div>
           </>

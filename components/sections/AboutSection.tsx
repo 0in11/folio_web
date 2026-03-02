@@ -1,3 +1,5 @@
+import FadeIn from "@/components/ui/FadeIn";
+
 const strengths = [
   {
     title: "도메인 구조화",
@@ -29,63 +31,67 @@ export default function AboutSection() {
       <div className="max-w-content mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
           {/* Left: Text */}
-          <div>
-            <p className="font-mono text-xs text-accent-primary tracking-widest uppercase mb-3">
-              About
-            </p>
-            <h2
-              id="about-heading"
-              className="font-display text-4xl md:text-5xl font-bold text-text-primary mb-6"
-            >
-              도메인 지식을
-              <br />
-              AI로 연결합니다.
-            </h2>
-            <p className="text-text-secondary leading-relaxed mb-8">
-              실제 현장에서 쓰이는 AI 시스템을 만드는 것을 목표로 합니다.
-              단순한 프로토타입이 아니라, 온프레미스 서버에서 동작하는 RAG 챗봇,
-              도메인 법령을 탐색하는 GraphRAG, 특화 데이터로 파인튜닝한 sLLM까지.
-              문제를 정의하고, 기술을 선택하고, 작동하는 시스템을 납품합니다.
-            </p>
+          <FadeIn>
+            <div>
+              <p className="font-mono text-xs text-accent-primary tracking-widest uppercase mb-3">
+                About
+              </p>
+              <h2
+                id="about-heading"
+                className="font-display text-4xl md:text-5xl font-bold text-text-primary mb-6"
+              >
+                도메인 지식을
+                <br />
+                AI로 연결합니다.
+              </h2>
+              <p className="text-text-secondary leading-relaxed mb-8">
+                실제 현장에서 쓰이는 AI 시스템을 만드는 것을 목표로 합니다.
+                단순한 프로토타입이 아니라, 온프레미스 서버에서 동작하는 RAG 챗봇,
+                도메인 법령을 탐색하는 GraphRAG, 특화 데이터로 파인튜닝한 sLLM까지.
+                문제를 정의하고, 기술을 선택하고, 작동하는 시스템을 납품합니다.
+              </p>
 
-            {/* Stats */}
-            <div className="grid grid-cols-4 gap-4 mb-8">
-              {stats.map((stat) => (
-                <div key={stat.label} className="text-center">
-                  <div className="font-display text-3xl font-bold text-accent-primary">
-                    {stat.value}
+              {/* Stats */}
+              <div className="grid grid-cols-4 gap-4 mb-8">
+                {stats.map((stat) => (
+                  <div key={stat.label} className="text-center">
+                    <div className="font-display text-3xl font-bold text-accent-primary">
+                      {stat.value}
+                    </div>
+                    <div className="font-mono text-xs text-text-muted mt-1">
+                      {stat.label}
+                    </div>
                   </div>
-                  <div className="font-mono text-xs text-text-muted mt-1">
-                    {stat.label}
-                  </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
+          </FadeIn>
 
           {/* Right: Strengths */}
-          <div>
-            <h3 className="font-mono text-xs text-text-muted tracking-widest uppercase mb-6">
-              Core Strengths
-            </h3>
-            <ul className="space-y-6">
-              {strengths.map((strength, index) => (
-                <li key={index} className="flex gap-4">
-                  <span className="font-mono text-xs text-accent-primary mt-1 flex-shrink-0">
-                    0{index + 1}
-                  </span>
-                  <div>
-                    <h4 className="font-display font-bold text-text-primary mb-1">
-                      {strength.title}
-                    </h4>
-                    <p className="text-sm text-text-secondary leading-relaxed">
-                      {strength.description}
-                    </p>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
+          <FadeIn delay={0.15}>
+            <div>
+              <h3 className="font-mono text-xs text-text-muted tracking-widest uppercase mb-6">
+                Core Strengths
+              </h3>
+              <ul className="space-y-6">
+                {strengths.map((strength, index) => (
+                  <li key={index} className="flex gap-4">
+                    <span className="font-mono text-xs text-accent-primary mt-1 flex-shrink-0">
+                      0{index + 1}
+                    </span>
+                    <div>
+                      <h4 className="font-display font-bold text-text-primary mb-1">
+                        {strength.title}
+                      </h4>
+                      <p className="text-sm text-text-secondary leading-relaxed">
+                        {strength.description}
+                      </p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </FadeIn>
         </div>
       </div>
     </section>
