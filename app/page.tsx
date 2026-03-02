@@ -1,7 +1,9 @@
-export default function Home() {
+import HeroSection from "@/components/sections/HeroSection";
+
+export default function HomePage() {
   return (
-    <main>
-      <p>포트폴리오 구현 중...</p>
-    </main>
+    <>
+      <HeroSection />
+    </>
   );
 }
