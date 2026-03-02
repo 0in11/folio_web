@@ -16,9 +16,9 @@
 | Task 3 | Vitest 테스트 환경 설정 | ✅ 완료 | 9e75778 |
 | Task 4 | 데이터 파일 정의 | ✅ 완료 | feeaf4d |
 | Task 5 | lib 유틸리티 함수 | ✅ 완료 | 08fd3e7 |
-| Task 6 | 폰트 & 레이아웃 (app/layout.tsx) | ⏳ 대기 | - |
-| Task 7 | Hero Section | ⏳ 대기 | - |
-| Task 8 | ProjectCard UI + Selected Projects Section | ⏳ 대기 | - |
+| Task 6 | 폰트 & 레이아웃 (app/layout.tsx) | ✅ 완료 | 24980ad |
+| Task 7 | Hero Section | ✅ 완료 | 2b1b57c |
+| Task 8 | ProjectCard UI + Selected Projects Section | ✅ 완료 | 9cd89f3 |
 | Task 9 | Career Snapshot Section | ⏳ 대기 | - |
 | Task 10 | About Section | ⏳ 대기 | - |
 | Task 11 | Skills Section | ⏳ 대기 | - |
