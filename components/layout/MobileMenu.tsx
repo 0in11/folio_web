@@ -38,7 +38,7 @@ export default function MobileMenu({ isOpen, onClose, links }: MobileMenuProps) 
 
   return (
     <div
-      className="fixed inset-0 z-50 bg-bg-primary/95 backdrop-blur-md flex flex-col"
+      className="fixed inset-0 z-[60] bg-bg-primary backdrop-blur-md flex flex-col"
       role="dialog"
       aria-modal="true"
       aria-label="모바일 메뉴"
