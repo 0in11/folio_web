@@ -4,7 +4,7 @@ import FadeIn from "@/components/ui/FadeIn";
 
 export default function CareerSection() {
   return (
-    <section id="career" className="py-section px-6" aria-labelledby="career-heading">
+    <section id="career" className="py-section-mobile md:py-section px-6" aria-labelledby="career-heading">
       <div className="max-w-content mx-auto">
         <FadeIn className="mb-12">
           <p className="font-mono text-xs text-accent-primary tracking-widest uppercase mb-3">
@@ -18,10 +18,10 @@ export default function CareerSection() {
           </h2>
         </FadeIn>
 
-        <div className="max-w-2xl space-y-0">
+        <div className="max-w-2xl space-y-0" role="list" aria-label={`${careerHistory.length}개의 경력 사항`}>
           {careerHistory.map((item, index) => (
             <FadeIn key={index} delay={index * 0.1}>
-              <div className="relative flex gap-6 pb-8">
+              <div className="relative flex gap-6 pb-8" role="listitem">
                 {/* Timeline line */}
                 {index < careerHistory.length - 1 && (
                   <div

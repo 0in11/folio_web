@@ -7,7 +7,7 @@ export default function ProjectsSection() {
   const more = getMoreProjects();
 
   return (
-    <section id="projects" className="py-section px-6" aria-labelledby="projects-heading">
+    <section id="projects" className="py-section-mobile md:py-section px-6" aria-labelledby="projects-heading">
       <div className="max-w-content mx-auto">
         {/* Section Header */}
         <FadeIn className="mb-12">
@@ -25,7 +25,7 @@ export default function ProjectsSection() {
         {/* Featured Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-16">
           {featured.map((project, i) => (
-            <FadeIn key={project.id} delay={i * 0.1}>
+            <FadeIn key={project.id} delay={i * 0.1} className="h-full">
               <ProjectCard project={project} featured />
             </FadeIn>
           ))}
@@ -41,7 +41,7 @@ export default function ProjectsSection() {
             </FadeIn>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
               {more.map((project, i) => (
-                <FadeIn key={project.id} delay={i * 0.08}>
+                <FadeIn key={project.id} delay={i * 0.08} className="h-full">
                   <ProjectCard project={project} />
                 </FadeIn>
               ))}

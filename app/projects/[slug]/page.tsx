@@ -1,7 +1,10 @@
 import { notFound } from "next/navigation";
 import { getProjectBySlug, projects } from "@/data/projects";
+import type { DetailSection, ProjectImage } from "@/data/projects";
 import type { Metadata } from "next";
+import Image from "next/image";
 import Badge from "@/components/ui/Badge";
+import FormattedContent from "@/components/ui/FormattedContent";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
@@ -21,6 +24,115 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title: `${project.title} | Jin YoungIn`,
     description: project.description,
   };
+}
+
+function SectionImage({ image }: { image: ProjectImage }) {
+  return (
+    <figure className="mt-6 rounded-card border border-border-subtle bg-bg-surface overflow-hidden">
+      <div className="p-2">
+        <Image
+          src={image.src}
+          alt={image.alt}
+          width={1200}
+          height={675}
+          className="w-full h-auto rounded-sm"
+        />
+      </div>
+      {image.caption && (
+        <figcaption className="px-4 py-3 border-t border-border-subtle">
+          <p className="font-mono text-xs text-text-muted text-center">
+            {image.caption}
+          </p>
+        </figcaption>
+      )}
+    </figure>
+  );
+}
+
+function SectionTable({
+  rows,
+  headers = ["분류", "기술"],
+}: {
+  rows: { label: string; value: string }[];
+  headers?: [string, string];
+}) {
+  return (
+    <div className="rounded-card border border-border-subtle bg-bg-surface overflow-hidden">
+      <table className="w-full text-sm">
+        <thead>
+          <tr className="border-b border-border-subtle">
+            <th className="text-left font-mono text-xs text-text-muted px-4 py-2.5 w-[160px]">
+              {headers[0]}
+            </th>
+            <th className="text-left font-mono text-xs text-text-muted px-4 py-2.5">
+              {headers[1]}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map(({ label, value }) => (
+            <tr
+              key={label}
+              className="border-b border-border-subtle last:border-b-0"
+            >
+              <td className="px-4 py-2.5 font-medium text-text-primary">
+                {label}
+              </td>
+              <td className="px-4 py-2.5 text-text-secondary">{value}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+function DetailSectionBlock({ section }: { section: DetailSection }) {
+  return (
+    <section>
+      <h2 className="font-display text-2xl font-bold text-text-primary mb-4">
+        {section.title}
+      </h2>
+
+      {/* Image before content (e.g. 시스템 아키텍처) */}
+      {section.image && !section.content?.startsWith("챗봇") && (
+        <SectionImage image={section.image} />
+      )}
+
+      {/* Table */}
+      {section.table && (
+        <div className="mt-2">
+          <SectionTable rows={section.table} headers={section.tableHeaders} />
+        </div>
+      )}
+
+      {/* Content */}
+      {section.content && (
+        <div className={section.image || section.table ? "mt-6" : ""}>
+          <FormattedContent content={section.content} />
+        </div>
+      )}
+
+      {/* Image after content (e.g. 구현 결과물) */}
+      {section.image && section.content?.startsWith("챗봇") && (
+        <SectionImage image={section.image} />
+      )}
+
+      {/* Subsections */}
+      {section.subsections && (
+        <div className="mt-2 space-y-8">
+          {section.subsections.map((sub) => (
+            <div key={sub.title}>
+              <h3 className="font-display text-lg font-semibold text-text-primary mb-3">
+                {sub.title}
+              </h3>
+              <FormattedContent content={sub.content} />
+            </div>
+          ))}
+        </div>
+      )}
+    </section>
+  );
 }
 
 export default async function ProjectDetailPage({ params }: PageProps) {
@@ -80,25 +192,59 @@ export default async function ProjectDetailPage({ params }: PageProps) {
 
         {/* Detail Content */}
         {project.detail ? (
-          <article className="space-y-12">
-            {[
-              { title: "Problem", content: project.detail.problem },
-              { title: "My Role", content: project.detail.role },
-              { title: "Architecture", content: project.detail.architecture },
-              { title: "Implementation", content: project.detail.implementation },
-              { title: "Impact", content: project.detail.impact },
-              { title: "Learnings", content: project.detail.learnings },
-            ].map(({ title, content }) => (
-              <section key={title}>
-                <h2 className="font-display text-2xl font-bold text-text-primary mb-4">
-                  {title}
-                </h2>
-                <p className="text-text-secondary leading-relaxed whitespace-pre-line">
-                  {content}
-                </p>
-              </section>
-            ))}
-          </article>
+          project.detail.sections ? (
+            <article className="space-y-12">
+              {project.detail.sections.map((section) => (
+                <DetailSectionBlock key={section.title} section={section} />
+              ))}
+            </article>
+          ) : (
+            <article className="space-y-12">
+              {(
+                [
+                  { title: "Problem", content: project.detail.problem },
+                  { title: "My Role", content: project.detail.role },
+                  {
+                    title: "Architecture",
+                    content: project.detail.architecture,
+                    image: project.detail.architectureImage,
+                  },
+                  { title: "Implementation", content: project.detail.implementation },
+                  { title: "Impact", content: project.detail.impact },
+                  { title: "Learnings", content: project.detail.learnings },
+                ] as {
+                  title: string;
+                  content?: string;
+                  image?: ProjectImage;
+                }[]
+              )
+                .filter(({ content }) => content)
+                .map(({ title, content, image }) => (
+                  <section key={title}>
+                    <h2 className="font-display text-2xl font-bold text-text-primary mb-4">
+                      {title}
+                    </h2>
+                    <p className="text-text-secondary leading-relaxed whitespace-pre-line">
+                      {content}
+                    </p>
+                    {image && <SectionImage image={image} />}
+                  </section>
+                ))}
+
+              {project.detail.demoImages && project.detail.demoImages.length > 0 && (
+                <section>
+                  <h2 className="font-display text-2xl font-bold text-text-primary mb-4">
+                    Demo
+                  </h2>
+                  <div className="space-y-6">
+                    {project.detail.demoImages.map((img) => (
+                      <SectionImage key={img.src} image={img} />
+                    ))}
+                  </div>
+                </section>
+              )}
+            </article>
+          )
         ) : (
           <div className="text-center py-16 text-text-muted">
             <p>상세 내용을 준비 중입니다.</p>

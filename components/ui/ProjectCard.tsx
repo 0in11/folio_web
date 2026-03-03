@@ -14,7 +14,8 @@ export default function ProjectCard({ project, featured = false }: ProjectCardPr
     <Link
       href={`/projects/${project.slug}`}
       className={cn(
-        "group block rounded-card border border-border-subtle bg-bg-surface p-6",
+        "group block h-full rounded-card border border-border-subtle bg-bg-surface p-6",
+        "flex flex-col",
         "hover:border-border-strong hover:bg-bg-hover transition-all duration-200",
         "hover:-translate-y-0.5 hover:shadow-lg hover:shadow-black/20",
         featured && "md:p-8"
@@ -57,7 +58,7 @@ export default function ProjectCard({ project, featured = false }: ProjectCardPr
       </div>
 
       {/* Tech Badges */}
-      <div className="flex flex-wrap gap-1.5">
+      <div className="mt-auto flex min-h-[50px] content-start flex-wrap gap-1.5">
         {project.technologies.slice(0, 5).map((tech) => (
           <Badge key={tech}>{tech}</Badge>
         ))}

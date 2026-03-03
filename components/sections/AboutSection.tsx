@@ -27,7 +27,7 @@ const stats = [
 
 export default function AboutSection() {
   return (
-    <section id="about" className="py-section px-6" aria-labelledby="about-heading">
+    <section id="about" className="py-section-mobile md:py-section px-6" aria-labelledby="about-heading">
       <div className="max-w-content mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
           {/* Left: Text */}
@@ -52,7 +52,7 @@ export default function AboutSection() {
               </p>
 
               {/* Stats */}
-              <div className="grid grid-cols-4 gap-4 mb-8">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
                 {stats.map((stat) => (
                   <div key={stat.label} className="text-center">
                     <div className="font-display text-3xl font-bold text-accent-primary">

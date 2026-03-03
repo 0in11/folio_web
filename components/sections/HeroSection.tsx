@@ -13,6 +13,11 @@ const fadeUp = {
   animate: { opacity: 1, y: 0 },
 };
 
+const fadeOnly = {
+  initial: { opacity: 0 },
+  animate: { opacity: 1 },
+};
+
 export default function HeroSection() {
   const prefersReducedMotion = useReducedMotion();
 
@@ -20,6 +25,9 @@ export default function HeroSection() {
   const item = prefersReducedMotion
     ? {}
     : { ...fadeUp, transition: { duration: 0.5, ease: "easeOut" } };
+  const titleItem = prefersReducedMotion
+    ? {}
+    : { ...fadeOnly, transition: { duration: 0.5, ease: "easeOut" } };
 
   const Wrapper = prefersReducedMotion ? "div" : motion.div;
   const Item = prefersReducedMotion ? "div" : motion.div;
@@ -41,13 +49,15 @@ export default function HeroSection() {
         </Item>
 
         {/* Name */}
-        <Item {...(!prefersReducedMotion && { variants: item })}>
+        <Item {...(!prefersReducedMotion && { variants: titleItem })}>
           <h1
             id="hero-heading"
-            className="font-display text-6xl md:text-8xl font-bold text-text-primary leading-none tracking-tight mb-6"
+            className="font-display font-bold tracking-tight mb-6"
           >
-            Jin YoungIn
-            <span className="block text-text-muted text-5xl md:text-7xl mt-2">
+            <span className="block text-6xl md:text-8xl text-text-primary leading-[1.15] pb-[0.08em] font-sans">
+              Jin YoungIn
+            </span>
+            <span className="block text-text-muted text-5xl md:text-7xl leading-[1.1] mt-2">
               진영인
             </span>
           </h1>

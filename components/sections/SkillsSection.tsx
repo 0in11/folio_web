@@ -3,7 +3,7 @@ import FadeIn from "@/components/ui/FadeIn";
 
 export default function SkillsSection() {
   return (
-    <section id="skills" className="py-section px-6" aria-labelledby="skills-heading">
+    <section id="skills" className="py-section-mobile md:py-section px-6" aria-labelledby="skills-heading">
       <div className="max-w-content mx-auto">
         <FadeIn className="mb-12">
           <p className="font-mono text-xs text-accent-primary tracking-widest uppercase mb-3">

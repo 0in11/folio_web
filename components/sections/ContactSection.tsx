@@ -18,7 +18,7 @@ const contactLinks = [
 
 export default function ContactSection() {
   return (
-    <section id="contact" className="py-section px-6" aria-labelledby="contact-heading">
+    <section id="contact" className="py-section-mobile md:py-section px-6" aria-labelledby="contact-heading">
       <div className="max-w-content mx-auto">
         <div className="max-w-2xl">
           <FadeIn>

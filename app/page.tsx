@@ -3,8 +3,7 @@ import ProjectsSection from "@/components/sections/ProjectsSection";
 import CareerSection from "@/components/sections/CareerSection";
 import AboutSection from "@/components/sections/AboutSection";
 import SkillsSection from "@/components/sections/SkillsSection";
-import AwardsSection from "@/components/sections/AwardsSection";
-import EducationSection from "@/components/sections/EducationSection";
+import CredentialsSection from "@/components/sections/CredentialsSection";
 import ContactSection from "@/components/sections/ContactSection";
 
 export default function HomePage() {
@@ -15,8 +14,7 @@ export default function HomePage() {
       <CareerSection />
       <AboutSection />
       <SkillsSection />
-      <AwardsSection />
-      <EducationSection />
+      <CredentialsSection />
       <ContactSection />
     </>
   );

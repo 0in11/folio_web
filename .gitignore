@@ -44,3 +44,11 @@ next-env.d.ts
 .venv/
 __pycache__/
 *.pyc
+
+# Screenshots (debug/development)
+*.png
+!public/**/*.png
+
+# Cache
+.npm-cache/
+.playwright-mcp/

@@ -1,26 +1,12 @@
 import type { Metadata } from "next";
-import { Syne, Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
+import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/layout/Header";
-
-const syne = Syne({
-  subsets: ["latin"],
-  variable: "--font-syne",
-  weight: ["400", "700", "800"],
-  display: "swap",
-});
 
 const jakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
   variable: "--font-jakarta",
-  weight: ["300", "400", "500", "600"],
-  display: "swap",
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  variable: "--font-jetbrains",
-  weight: ["400", "500"],
+  weight: ["300", "400", "500", "600", "700", "800"],
   display: "swap",
 });
 
@@ -73,7 +59,7 @@ export default function RootLayout({
   return (
     <html
       lang="ko"
-      className={`${syne.variable} ${jakartaSans.variable} ${jetbrainsMono.variable}`}
+      className={jakartaSans.variable}
     >
       <body className="bg-bg-primary text-text-primary antialiased">
         <Header />
