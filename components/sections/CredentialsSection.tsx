@@ -1,7 +1,7 @@
 import { awards, publications } from "@/data/awards";
 import { education, certifications } from "@/data/education";
 import { GraduationCap, Trophy, Award, BookOpen } from "lucide-react";
-import FadeIn from "@/components/ui/FadeIn";
+import FadeIn, { STAGGER_DELAY } from "@/components/ui/FadeIn";
 
 const parseDate = (d: string) => d.replace(".", "").padEnd(6, "0");
 
@@ -19,7 +19,7 @@ export default function CredentialsSection() {
       <div className="max-w-content mx-auto">
         <FadeIn className="mb-12">
           <p className="font-mono text-xs text-accent-primary tracking-widest uppercase mb-3">
-            Credentials
+            Awards & Education
           </p>
           <h2
             id="credentials-heading"
@@ -56,7 +56,7 @@ export default function CredentialsSection() {
           </FadeIn>
 
           {/* Awards */}
-          <FadeIn delay={0.05}>
+          <FadeIn delay={1 * STAGGER_DELAY}>
             <div className="h-full p-6 rounded-card border border-border-subtle bg-bg-surface">
               <h3 className="font-mono text-xs text-text-muted uppercase tracking-widest mb-4 flex items-center gap-2">
                 <Trophy size={14} /> Awards
@@ -82,7 +82,7 @@ export default function CredentialsSection() {
           </FadeIn>
 
           {/* Certifications */}
-          <FadeIn delay={0.1}>
+          <FadeIn delay={2 * STAGGER_DELAY}>
             <div className="h-full p-6 rounded-card border border-border-subtle bg-bg-surface">
               <h3 className="font-mono text-xs text-text-muted uppercase tracking-widest mb-4 flex items-center gap-2">
                 <Award size={14} /> Certifications
@@ -101,7 +101,7 @@ export default function CredentialsSection() {
           </FadeIn>
 
           {/* Publications */}
-          <FadeIn delay={0.15}>
+          <FadeIn delay={3 * STAGGER_DELAY}>
             <div className="h-full p-6 rounded-card border border-border-subtle bg-bg-surface">
               <h3 className="font-mono text-xs text-text-muted uppercase tracking-widest mb-4 flex items-center gap-2">
                 <BookOpen size={14} /> Publications

@@ -8,6 +8,7 @@ export interface DetailSection {
   title: string;
   content?: string;
   image?: ProjectImage;
+  imagePosition?: "before" | "after";
   table?: { label: string; value: string }[];
   tableHeaders?: [string, string];
   subsections?: { title: string; content: string }[];
@@ -147,6 +148,7 @@ export const projects: Project[] = [
         {
           title: "구현 결과물",
           content: "챗봇 메인 화면 — GENERAL / LAW / POLICY 모드 선택 UI",
+          imagePosition: "after",
           image: {
             src: "/projects/on-premise-chatbot/chatbot-main.png",
             alt: "챗봇 메인 화면 — GENERAL / LAW / POLICY 모드 선택 UI",

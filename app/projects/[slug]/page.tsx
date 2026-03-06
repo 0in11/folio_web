@@ -35,6 +35,7 @@ function SectionImage({ image }: { image: ProjectImage }) {
           alt={image.alt}
           width={1200}
           height={675}
+          sizes="(max-width: 768px) 100vw, 768px"
           className="w-full h-auto rounded-sm"
         />
       </div>
@@ -94,8 +95,8 @@ function DetailSectionBlock({ section }: { section: DetailSection }) {
         {section.title}
       </h2>
 
-      {/* Image before content (e.g. 시스템 아키텍처) */}
-      {section.image && !section.content?.startsWith("챗봇") && (
+      {/* Image before content */}
+      {section.image && (section.imagePosition ?? "before") === "before" && (
         <SectionImage image={section.image} />
       )}
 
@@ -113,8 +114,8 @@ function DetailSectionBlock({ section }: { section: DetailSection }) {
         </div>
       )}
 
-      {/* Image after content (e.g. 구현 결과물) */}
-      {section.image && section.content?.startsWith("챗봇") && (
+      {/* Image after content */}
+      {section.image && (section.imagePosition ?? "before") === "after" && (
         <SectionImage image={section.image} />
       )}
 

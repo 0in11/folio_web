@@ -1,6 +1,6 @@
 import { careerHistory } from "@/data/career";
 import Badge from "@/components/ui/Badge";
-import FadeIn from "@/components/ui/FadeIn";
+import FadeIn, { STAGGER_DELAY } from "@/components/ui/FadeIn";
 
 export default function CareerSection() {
   return (
@@ -18,10 +18,10 @@ export default function CareerSection() {
           </h2>
         </FadeIn>
 
-        <div className="max-w-2xl space-y-0" role="list" aria-label={`${careerHistory.length}개의 경력 사항`}>
+        <ol className="max-w-2xl space-y-0" aria-label={`${careerHistory.length}개의 경력 사항`}>
           {careerHistory.map((item, index) => (
-            <FadeIn key={index} delay={index * 0.1}>
-              <div className="relative flex gap-6 pb-8" role="listitem">
+            <FadeIn key={index} delay={index * STAGGER_DELAY} as="li">
+              <div className="relative flex gap-6 pb-8">
                 {/* Timeline line */}
                 {index < careerHistory.length - 1 && (
                   <div
@@ -64,7 +64,7 @@ export default function CareerSection() {
               </div>
             </FadeIn>
           ))}
-        </div>
+        </ol>
       </div>
     </section>
   );

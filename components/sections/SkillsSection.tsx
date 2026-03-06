@@ -1,5 +1,5 @@
 import { skillGroups } from "@/data/skills";
-import FadeIn from "@/components/ui/FadeIn";
+import FadeIn, { STAGGER_DELAY } from "@/components/ui/FadeIn";
 
 export default function SkillsSection() {
   return (
@@ -19,7 +19,7 @@ export default function SkillsSection() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {skillGroups.map((group, i) => (
-            <FadeIn key={group.label} delay={i * 0.1}>
+            <FadeIn key={group.label} delay={i * STAGGER_DELAY}>
               <div>
                 <div className="mb-4 pb-4 border-b border-border-subtle">
                   <h3 className="font-display font-bold text-text-primary text-lg">

@@ -27,9 +27,9 @@ const config: Config = {
         success: "#34D399",
       },
       fontFamily: {
-        display: ["var(--font-jakarta)", "sans-serif"],
+        display: ["var(--font-syne)", "sans-serif"],
         sans: ["var(--font-jakarta)", "sans-serif"],
-        mono: ["var(--font-jakarta)", "monospace"],
+        mono: ["var(--font-jetbrains)", "monospace"],
       },
       maxWidth: {
         content: "1280px",

@@ -1,5 +1,5 @@
 import ProjectCard from "@/components/ui/ProjectCard";
-import FadeIn from "@/components/ui/FadeIn";
+import FadeIn, { STAGGER_DELAY } from "@/components/ui/FadeIn";
 import { getFeaturedProjects, getMoreProjects } from "@/data/projects";
 
 export default function ProjectsSection() {
@@ -25,7 +25,7 @@ export default function ProjectsSection() {
         {/* Featured Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-16">
           {featured.map((project, i) => (
-            <FadeIn key={project.id} delay={i * 0.1} className="h-full">
+            <FadeIn key={project.id} delay={i * STAGGER_DELAY} className="h-full">
               <ProjectCard project={project} featured />
             </FadeIn>
           ))}
@@ -41,7 +41,7 @@ export default function ProjectsSection() {
             </FadeIn>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
               {more.map((project, i) => (
-                <FadeIn key={project.id} delay={i * 0.08} className="h-full">
+                <FadeIn key={project.id} delay={i * STAGGER_DELAY} className="h-full">
                   <ProjectCard project={project} />
                 </FadeIn>
               ))}

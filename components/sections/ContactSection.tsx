@@ -1,5 +1,5 @@
 import { Github, Mail } from "lucide-react";
-import FadeIn from "@/components/ui/FadeIn";
+import FadeIn, { STAGGER_DELAY } from "@/components/ui/FadeIn";
 
 const contactLinks = [
   {
@@ -40,7 +40,7 @@ export default function ContactSection() {
             {contactLinks.map((link, i) => {
               const Icon = link.icon;
               return (
-                <FadeIn key={link.label} delay={i * 0.08}>
+                <FadeIn key={link.label} delay={i * STAGGER_DELAY}>
                   <a
                     href={link.href}
                     target={link.href.startsWith("mailto:") ? undefined : "_blank"}

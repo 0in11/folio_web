@@ -1,12 +1,26 @@
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans } from "next/font/google";
+import { Plus_Jakarta_Sans, Syne, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/layout/Header";
+
+const syne = Syne({
+  subsets: ["latin"],
+  variable: "--font-syne",
+  weight: ["600", "700"],
+  display: "swap",
+});
 
 const jakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
   variable: "--font-jakarta",
-  weight: ["300", "400", "500", "600", "700", "800"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-jetbrains",
+  weight: ["400", "500"],
   display: "swap",
 });
 
@@ -29,21 +43,12 @@ export const metadata: Metadata = {
     description:
       "AI Engineer focused on RAG, agents, LLMOps, and domain-specific AI systems.",
     url: siteUrl,
-    images: [
-      {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "Jin YoungIn Portfolio",
-      },
-    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Jin YoungIn | AI Engineer Portfolio",
     description:
       "AI Engineer focused on RAG, agents, LLMOps, and domain-specific AI systems.",
-    images: ["/og-image.png"],
   },
   robots: {
     index: true,
@@ -59,11 +64,17 @@ export default function RootLayout({
   return (
     <html
       lang="ko"
-      className={jakartaSans.variable}
+      className={`${syne.variable} ${jakartaSans.variable} ${jetbrainsMono.variable}`}
     >
       <body className="bg-bg-primary text-text-primary antialiased">
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-bg-surface focus:text-text-primary focus:rounded-card focus:border focus:border-border-strong"
+        >
+          Skip to content
+        </a>
         <Header />
-        <main>{children}</main>
+        <main id="main-content">{children}</main>
       </body>
     </html>
   );
