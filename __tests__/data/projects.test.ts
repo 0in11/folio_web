@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { projects, getFeaturedProjects, getProjectBySlug } from "@/data/projects";
+import { projects, getFeaturedProjects, getProjectBySlug } from "@/data/_static/projects";
 
 describe("projects data", () => {
   it("최소 3개 이상의 프로젝트가 있어야 한다", () => {

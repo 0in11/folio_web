@@ -1,4 +1,11 @@
 import FadeIn from "@/components/ui/FadeIn";
+import {
+  fetchFeaturedProjects,
+  fetchMoreProjects,
+  fetchCareerHistory,
+  fetchAwards,
+  fetchPublications,
+} from "@/lib/payload";
 
 const strengths = [
   {
@@ -18,14 +25,24 @@ const strengths = [
   },
 ];
 
-const stats = [
-  { value: "3+", label: "Projects" },
-  { value: "2", label: "Companies" },
-  { value: "1", label: "Publication" },
-  { value: "2", label: "Awards" },
-];
+export default async function AboutSection() {
+  const [featured, more, career, awards, publications] = await Promise.all([
+    fetchFeaturedProjects(),
+    fetchMoreProjects(),
+    fetchCareerHistory(),
+    fetchAwards(),
+    fetchPublications(),
+  ]);
 
-export default function AboutSection() {
+  const projectCount = featured.length + more.length;
+  const companyCount = new Set(career.map((c) => c.company)).size;
+
+  const stats = [
+    { value: `${projectCount}+`, label: "Projects" },
+    { value: String(companyCount), label: "Companies" },
+    { value: String(publications.length), label: publications.length === 1 ? "Publication" : "Publications" },
+    { value: String(awards.length), label: awards.length === 1 ? "Award" : "Awards" },
+  ];
   return (
     <section id="about" className="py-section-mobile md:py-section px-6" aria-labelledby="about-heading">
       <div className="max-w-content mx-auto">

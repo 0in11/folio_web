@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -9,7 +9,12 @@ interface MobileMenuProps {
   links: Array<{ label: string; href: string }>;
 }
 
+const FOCUSABLE_SELECTOR =
+  'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
 export default function MobileMenu({ isOpen, onClose, links }: MobileMenuProps) {
+  const dialogRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
@@ -27,6 +32,25 @@ export default function MobileMenu({ isOpen, onClose, links }: MobileMenuProps) 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         onClose();
+        return;
+      }
+
+      if (e.key !== "Tab" || !dialogRef.current) return;
+
+      const focusableElements = Array.from(
+        dialogRef.current.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR),
+      );
+      if (focusableElements.length === 0) return;
+
+      const first = focusableElements[0];
+      const last = focusableElements[focusableElements.length - 1];
+
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
       }
     };
 
@@ -34,10 +58,19 @@ export default function MobileMenu({ isOpen, onClose, links }: MobileMenuProps) 
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [isOpen, onClose]);
 
+  // Move focus into dialog when opened
+  useEffect(() => {
+    if (!isOpen || !dialogRef.current) return;
+    const firstFocusable =
+      dialogRef.current.querySelector<HTMLElement>(FOCUSABLE_SELECTOR);
+    firstFocusable?.focus();
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   return (
     <div
+      ref={dialogRef}
       className="fixed inset-0 z-[60] bg-bg-primary backdrop-blur-md flex flex-col"
       role="dialog"
       aria-modal="true"

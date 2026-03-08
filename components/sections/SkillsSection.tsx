@@ -1,7 +1,9 @@
-import { skillGroups } from "@/data/skills";
+import { fetchSkillGroups } from "@/lib/payload";
 import FadeIn, { STAGGER_DELAY } from "@/components/ui/FadeIn";
 
-export default function SkillsSection() {
+export default async function SkillsSection() {
+  const skillGroups = await fetchSkillGroups();
+
   return (
     <section id="skills" className="py-section-mobile md:py-section px-6" aria-labelledby="skills-heading">
       <div className="max-w-content mx-auto">

@@ -54,7 +54,7 @@ export default function HeroSection() {
             id="hero-heading"
             className="font-display font-bold tracking-tight mb-6"
           >
-            <span className="block text-6xl md:text-8xl text-text-primary leading-[1.15] pb-[0.08em] font-sans">
+            <span className="block text-6xl md:text-8xl text-text-primary leading-[1.15] pb-[0.08em]">
               Jin YoungIn
             </span>
             <span className="block text-text-muted text-5xl md:text-7xl leading-[1.1] mt-2">

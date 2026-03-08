@@ -2,13 +2,19 @@ import type { CollectionConfig } from "payload";
 
 export const Career: CollectionConfig = {
   slug: "career",
+  access: {
+    read: () => true,
+    create: ({ req }) => Boolean(req.user),
+    update: ({ req }) => Boolean(req.user),
+    delete: ({ req }) => Boolean(req.user),
+  },
   admin: {
     useAsTitle: "company",
   },
   hooks: {
     afterChange: [
-      () => {
-        const { revalidateTag } = require("next/cache");
+      async () => {
+        const { revalidateTag } = await import("next/cache");
         revalidateTag("career");
       },
     ],

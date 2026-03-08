@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { getProjectBySlug, projects } from "@/data/projects";
+import { fetchProjectBySlug, fetchAllProjectSlugs } from "@/lib/payload";
 import type { DetailSection, ProjectImage } from "@/data/projects";
 import type { Metadata } from "next";
 import Image from "next/image";
@@ -13,12 +13,13 @@ interface PageProps {
 }
 
 export async function generateStaticParams() {
-  return projects.map((project) => ({ slug: project.slug }));
+  const slugs = await fetchAllProjectSlugs();
+  return slugs.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const project = getProjectBySlug(slug);
+  const project = await fetchProjectBySlug(slug);
   if (!project) return {};
   return {
     title: `${project.title} | Jin YoungIn`,
@@ -138,7 +139,7 @@ function DetailSectionBlock({ section }: { section: DetailSection }) {
 
 export default async function ProjectDetailPage({ params }: PageProps) {
   const { slug } = await params;
-  const project = getProjectBySlug(slug);
+  const project = await fetchProjectBySlug(slug);
 
   if (!project) notFound();
 

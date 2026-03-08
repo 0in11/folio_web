@@ -1,10 +1,14 @@
 import { render, screen } from "@testing-library/react";
+import type { HTMLAttributes, ReactNode } from "react";
 import { describe, it, expect, vi } from "vitest";
 import FadeIn from "@/components/ui/FadeIn";
 
 vi.mock("framer-motion", () => ({
   motion: {
-    div: ({ children, ...props }: Record<string, unknown>) => (
+    div: ({
+      children,
+      ...props
+    }: HTMLAttributes<HTMLDivElement> & { children?: ReactNode }) => (
       <div data-testid="motion" {...props}>
         {children}
       </div>

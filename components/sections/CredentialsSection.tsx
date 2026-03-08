@@ -1,15 +1,25 @@
-import { awards, publications } from "@/data/awards";
-import { education, certifications } from "@/data/education";
+import {
+  fetchAwards,
+  fetchPublications,
+  fetchEducation,
+  fetchCertifications,
+} from "@/lib/payload";
 import { GraduationCap, Trophy, Award, BookOpen } from "lucide-react";
 import FadeIn, { STAGGER_DELAY } from "@/components/ui/FadeIn";
 
 const parseDate = (d: string) => d.replace(".", "").padEnd(6, "0");
 
-const sortedAwards = [...awards].sort((a, b) => parseDate(b.date).localeCompare(parseDate(a.date)));
-const sortedCerts = [...certifications].sort((a, b) => parseDate(b.date).localeCompare(parseDate(a.date)));
-const sortedPubs = [...publications].sort((a, b) => b.year - a.year);
+export default async function CredentialsSection() {
+  const [awards, publications, educationData, certifications] = await Promise.all([
+    fetchAwards(),
+    fetchPublications(),
+    fetchEducation(),
+    fetchCertifications(),
+  ]);
 
-export default function CredentialsSection() {
+  const sortedAwards = [...awards].sort((a, b) => parseDate(b.date).localeCompare(parseDate(a.date)));
+  const sortedCerts = [...certifications].sort((a, b) => parseDate(b.date).localeCompare(parseDate(a.date)));
+  const sortedPubs = [...publications].sort((a, b) => b.year - a.year);
   return (
     <section
       id="credentials"
@@ -37,8 +47,8 @@ export default function CredentialsSection() {
                 <GraduationCap size={14} /> Education
               </h3>
               <div className="space-y-3">
-                {education.map((edu, i) => (
-                  <div key={i}>
+                {educationData.map((edu) => (
+                  <div key={edu.institution}>
                     <p className="font-display font-bold text-text-primary">
                       {edu.institution}
                     </p>
@@ -62,8 +72,8 @@ export default function CredentialsSection() {
                 <Trophy size={14} /> Awards
               </h3>
               <div className="space-y-3">
-                {sortedAwards.map((award, i) => (
-                  <div key={i} className="flex gap-4">
+                {sortedAwards.map((award) => (
+                  <div key={award.title} className="flex gap-4">
                     <span className="font-mono text-xs text-text-muted w-16 flex-shrink-0 mt-0.5">
                       {award.date}
                     </span>
@@ -88,8 +98,8 @@ export default function CredentialsSection() {
                 <Award size={14} /> Certifications
               </h3>
               <div className="space-y-3">
-                {sortedCerts.map((cert, i) => (
-                  <div key={i} className="flex gap-4">
+                {sortedCerts.map((cert) => (
+                  <div key={cert.name} className="flex gap-4">
                     <span className="font-mono text-xs text-text-muted w-16 flex-shrink-0 mt-0.5">
                       {cert.date}
                     </span>
@@ -107,8 +117,8 @@ export default function CredentialsSection() {
                 <BookOpen size={14} /> Publications
               </h3>
               <div className="space-y-3">
-                {sortedPubs.map((pub, i) => (
-                  <div key={i}>
+                {sortedPubs.map((pub) => (
+                  <div key={pub.title}>
                     <p className="text-sm font-medium text-text-primary leading-relaxed">
                       {pub.title}
                     </p>

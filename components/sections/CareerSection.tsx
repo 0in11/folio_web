@@ -1,8 +1,10 @@
-import { careerHistory } from "@/data/career";
+import { fetchCareerHistory } from "@/lib/payload";
 import Badge from "@/components/ui/Badge";
 import FadeIn, { STAGGER_DELAY } from "@/components/ui/FadeIn";
 
-export default function CareerSection() {
+export default async function CareerSection() {
+  const careerHistory = await fetchCareerHistory();
+
   return (
     <section id="career" className="py-section-mobile md:py-section px-6" aria-labelledby="career-heading">
       <div className="max-w-content mx-auto">
@@ -20,7 +22,7 @@ export default function CareerSection() {
 
         <ol className="max-w-2xl space-y-0" aria-label={`${careerHistory.length}개의 경력 사항`}>
           {careerHistory.map((item, index) => (
-            <FadeIn key={index} delay={index * STAGGER_DELAY} as="li">
+            <FadeIn key={`${item.company}-${item.role}`} delay={index * STAGGER_DELAY} as="li">
               <div className="relative flex gap-6 pb-8">
                 {/* Timeline line */}
                 {index < careerHistory.length - 1 && (

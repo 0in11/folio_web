@@ -1,10 +1,10 @@
 import ProjectCard from "@/components/ui/ProjectCard";
 import FadeIn, { STAGGER_DELAY } from "@/components/ui/FadeIn";
-import { getFeaturedProjects, getMoreProjects } from "@/data/projects";
+import { fetchFeaturedProjects, fetchMoreProjects } from "@/lib/payload";
 
-export default function ProjectsSection() {
-  const featured = getFeaturedProjects();
-  const more = getMoreProjects();
+export default async function ProjectsSection() {
+  const featured = await fetchFeaturedProjects();
+  const more = await fetchMoreProjects();
 
   return (
     <section id="projects" className="py-section-mobile md:py-section px-6" aria-labelledby="projects-heading">
