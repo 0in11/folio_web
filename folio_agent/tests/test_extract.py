@@ -1,6 +1,6 @@
 """Tests for content extraction from Payload CMS tables."""
 
-from unittest.mock import MagicMock, call
+from unittest.mock import MagicMock
 
 from src.embeddings.extract import (
     ContentChunk,

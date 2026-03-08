@@ -11,6 +11,7 @@ from typing import TYPE_CHECKING, Any
 import numpy as np
 from openai import OpenAI
 
+from src.agent.utils import extract_last_user_text
 from src.config import get_settings
 from src.db import get_connection
 
@@ -89,14 +90,7 @@ def retrieve(state: AgentState) -> dict[str, Any]:
 
     # Extract last user message text
     messages = state.get("messages", [])
-    query = ""
-    for msg in reversed(messages):
-        if hasattr(msg, "type") and msg.type == "human":
-            query = msg.content
-            break
-        if isinstance(msg, dict) and msg.get("role") == "user":
-            query = msg.get("content", "")
-            break
+    query = extract_last_user_text(messages)
 
     if not query:
         return {

@@ -7,6 +7,7 @@ from typing import Any
 import anthropic
 
 from src.agent.state import AgentState
+from src.agent.utils import extract_last_user_text
 from src.config import get_settings
 
 _SYSTEM_PROMPT = """\
@@ -33,7 +34,7 @@ def route(state: AgentState) -> dict[str, Any]:
     the ``query_type`` field set.
     """
     messages = state["messages"]
-    last_message = _extract_last_user_text(messages)
+    last_message = extract_last_user_text(messages)
 
     settings = get_settings()
     client = anthropic.Anthropic(api_key=settings.anthropic_api_key)
@@ -51,15 +52,3 @@ def route(state: AgentState) -> dict[str, Any]:
     return {"query_type": query_type}
 
 
-def _extract_last_user_text(messages: list) -> str:
-    """Return the text content of the last user message.
-
-    Handles both plain string messages and LangChain message objects.
-    """
-    for msg in reversed(messages):
-        # LangChain HumanMessage or dict with role
-        if hasattr(msg, "type") and msg.type == "human":
-            return str(msg.content)
-        if isinstance(msg, dict) and msg.get("role") == "user":
-            return str(msg.get("content", ""))
-    return ""
