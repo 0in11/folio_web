@@ -82,18 +82,18 @@
 | Task 25 | Initialize Python project (`folio_agent/`) | ✅ 완료 | (미커밋) |
 | Task 26 | Config module (`src/config.py`) | ✅ 완료 | (미커밋) |
 | Task 27 | Database module (`src/db.py`) | ✅ 완료 | (미커밋) |
-| Task 28 | Content extraction (`src/embeddings/extract.py`) | ⏳ 대기 | - |
-| Task 29 | Vectorization (`src/embeddings/vectorize.py`) | ⏳ 대기 | - |
-| Task 30 | Embedding CLI (`src/embeddings/cli.py`) | ⏳ 대기 | - |
-| Task 31 | LangGraph state (`src/agent/state.py`) | ⏳ 대기 | - |
-| Task 32 | Router node (`src/agent/nodes/router.py`) + unit test | ⏳ 대기 | - |
-| Task 33 | RAG retrieval node (`src/agent/nodes/retriever.py`) + unit test | ⏳ 대기 | - |
-| Task 34 | Generator node (`src/agent/nodes/generator.py`) + unit test | ⏳ 대기 | - |
-| Task 35 | Assemble graph (`src/agent/graph.py`) + unit test | ⏳ 대기 | - |
-| Task 36 | FastAPI server (`src/api.py`) with rate limiting | ⏳ 대기 | - |
-| Task 37 | Dockerfile | ⏳ 대기 | - |
-| Task 38 | docker-compose for local dev | ⏳ 대기 | - |
-| Task 39 | Python CI pipeline (GitHub Actions) | ⏳ 대기 | - |
+| Task 28 | Content extraction (`src/embeddings/extract.py`) | ✅ 완료 | ce9e68c |
+| Task 29 | Vectorization (`src/embeddings/vectorize.py`) | ✅ 완료 | b5fe06f |
+| Task 30 | Embedding CLI (`src/embeddings/cli.py`) | ✅ 완료 | 5480897 |
+| Task 31 | LangGraph state (`src/agent/state.py`) | ✅ 완료 | 533bcc1 |
+| Task 32 | Router node (`src/agent/nodes/router.py`) + unit test | ✅ 완료 | 533bcc1 |
+| Task 33 | RAG retrieval node (`src/agent/nodes/retriever.py`) + unit test | ✅ 완료 | 533bcc1 |
+| Task 34 | Generator node (`src/agent/nodes/generator.py`) + unit test | ✅ 완료 | 6308a99 |
+| Task 35 | Assemble graph (`src/agent/graph.py`) + unit test | ✅ 완료 | 6308a99 |
+| Task 36 | FastAPI server (`src/api.py`) with rate limiting | ✅ 완료 | 6308a99 |
+| Task 37 | Dockerfile | ✅ 완료 | (미커밋) |
+| Task 38 | docker-compose for local dev | ✅ 완료 | (미커밋) |
+| Task 39 | Python CI pipeline (GitHub Actions) | ✅ 완료 | (미커밋) |
 
 #### Phase 4: Chatbot Frontend (Tasks 40-46)
 
