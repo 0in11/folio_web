@@ -99,9 +99,9 @@
 
 | Task | 이름 | 상태 | 커밋 |
 |------|------|------|------|
-| Task 40 | API proxy route (`app/api/chat/route.ts`) | ⏳ 대기 | - |
-| Task 41 | Streaming proxy route (`app/api/chat/stream/route.ts`) | ⏳ 대기 | - |
-| Task 42 | `useChatbot` hook (`hooks/useChatbot.ts`) | ⏳ 대기 | - |
+| Task 40 | API proxy route (`app/api/chat/route.ts`) | ✅ 완료 | (미커밋) |
+| Task 41 | Streaming proxy route (`app/api/chat/stream/route.ts`) | ✅ 완료 | (미커밋) |
+| Task 42 | `useChatbot` hook (`hooks/useChatbot.ts`) | ✅ 완료 | (미커밋) |
 | Task 43 | ChatMessage component (`components/chat/ChatMessage.tsx`) | ⏳ 대기 | - |
 | Task 44 | ChatBot panel (`components/chat/ChatBot.tsx`) | ⏳ 대기 | - |
 | Task 45 | Integrate into layout | ⏳ 대기 | - |
