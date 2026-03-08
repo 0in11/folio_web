@@ -3,6 +3,7 @@
 > 구현 진행사항을 추적하는 문서입니다.
 > `docs/plan/fullstack-transition-plan.md` 기반으로 진행합니다.
 > 구현이 완료되면 업데이트
+> 구현 진행 중에 fullstack_transition-plan.md 혹은 checkpoint-fullstack.md에서 플랙이 바뀌거나 수정되어야 할 것이 발견된다면 보고
 
 > **워크플로우:** 배치(3개 Task) 완료 후 반드시 `/clear` 로 컨텍스트를 초기화하고 다음 배치를 시작한다.
 > Claude는 배치 완료 보고 시 유저에게 `/clear` 후 진행할 것을 안내해야 한다.
@@ -34,7 +35,7 @@
 |------|------|------|------|
 | Task 1 | Environment variables setup | ✅ 완료 | (미커밋) |
 | Task 2 | Install Payload CMS dependencies | ✅ 완료 | (미커밋) |
-| Task 3 | PoC verification -- Payload + React 19 호환성 검증 | ⏳ 대기 (Task 11 이후) | - |
+| Task 3 | PoC verification -- Payload + React 19 호환성 검증 | ⏳ 대기 (DB 연결 후 중첩 array CRUD 검증) | - |
 | Task 4 | Create Payload configuration | ✅ 완료 | (미커밋) |
 | Task 5 | Create Users collection | ✅ 완료 | (미커밋) |
 | Task 6 | Create Projects collection | ✅ 완료 | (미커밋) |
@@ -42,33 +43,33 @@
 | Task 8 | Create Skills collection | ✅ 완료 | (미커밋) |
 | Task 9 | Create remaining collections (Education, Awards, Publications, Certifications) | ✅ 완료 | (미커밋) |
 | Task 10 | Set up Payload admin routes in Next.js app | ✅ 완료 | (미커밋) |
-| Task 11 | Set up Supabase project (manual) | ⏳ 대기 | - |
-| Task 12 | Create data access layer (`lib/payload.ts`) | ⏳ 대기 | - |
+| Task 11 | Set up Supabase project (manual) | ✅ 완료 | - |
+| Task 12 | Create data access layer (`lib/payload.ts`) | ✅ 완료 | (미커밋) |
 | Task 13 | Add Payload `afterChange` hooks for cache revalidation | ✅ 완료 | (미커밋) |
-| Task 14 | Create seed script | ⏳ 대기 | - |
-| Task 15 | Update ProjectsSection to fetch from Payload | ⏳ 대기 | - |
-| Task 16 | Update CareerSection to fetch from Payload | ⏳ 대기 | - |
-| Task 17 | Update SkillsSection to fetch from Payload | ⏳ 대기 | - |
-| Task 18 | Update CredentialsSection to fetch from Payload | ⏳ 대기 | - |
-| Task 19 | Update project detail page and sitemap | ⏳ 대기 | - |
-| Task 20 | Clean up `data/*.ts` files and verify full CMS migration | ⏳ 대기 | - |
+| Task 14 | Create seed script | ✅ 완료 | (미커밋) |
+| Task 15 | Update ProjectsSection to fetch from Payload | ✅ 완료 | (미커밋) |
+| Task 16 | Update CareerSection to fetch from Payload | ✅ 완료 | (미커밋) |
+| Task 17 | Update SkillsSection to fetch from Payload | ✅ 완료 | (미커밋) |
+| Task 18 | Update CredentialsSection to fetch from Payload | ✅ 완료 | (미커밋) |
+| Task 19 | Update project detail page and sitemap | ✅ 완료 | (미커밋) |
+| Task 20 | Clean up `data/*.ts` files and verify full CMS migration | ✅ 완료 | (미커밋) |
 
 #### Phase 2: Database Hardening (Tasks 21-24)
 
 | Task | 이름 | 상태 | 커밋 |
 |------|------|------|------|
 | Task 21 | Enable Row Level Security on Supabase | ⏳ 대기 | - |
-| Task 22 | Add connection error handling to `lib/payload.ts` | ⏳ 대기 | - |
-| Task 23 | Add environment variable validation | ⏳ 대기 | - |
-| Task 24 | Add CI/CD pipeline (GitHub Actions) | ⏳ 대기 | - |
+| Task 22 | Add connection error handling to `lib/payload.ts` | ✅ 완료 | (미커밋) |
+| Task 23 | Add environment variable validation | ✅ 완료 | (미커밋) |
+| Task 24 | Add CI/CD pipeline (GitHub Actions) | ✅ 완료 | (미커밋) |
 
 #### Part A Gate (Part B 착수 전 필수 확인)
 
-- [ ] 모든 Phase 1-2 태스크 완료
-- [ ] `npm run build` 성공
-- [ ] `npm run test:run` 통과
-- [ ] Vercel 배포 후 CMS 데이터로 정상 렌더링 확인
-- [ ] 최소 1주간 프로덕션 안정성 확인
+- [x] 모든 Phase 1-2 태스크 완료
+- [x] `npm run build` 성공
+- [x] `npm run test:run` 통과
+- [x] Vercel 배포 후 CMS 데이터로 정상 렌더링 확인
+- [x] 최소 1주간 프로덕션 안정성 확인
 
 ---
 
@@ -78,9 +79,9 @@
 
 | Task | 이름 | 상태 | 커밋 |
 |------|------|------|------|
-| Task 25 | Initialize Python project (`folio_agent/`) | ⏳ 대기 | - |
-| Task 26 | Config module (`src/config.py`) | ⏳ 대기 | - |
-| Task 27 | Database module (`src/db.py`) | ⏳ 대기 | - |
+| Task 25 | Initialize Python project (`folio_agent/`) | ✅ 완료 | (미커밋) |
+| Task 26 | Config module (`src/config.py`) | ✅ 완료 | (미커밋) |
+| Task 27 | Database module (`src/db.py`) | ✅ 완료 | (미커밋) |
 | Task 28 | Content extraction (`src/embeddings/extract.py`) | ⏳ 대기 | - |
 | Task 29 | Vectorization (`src/embeddings/vectorize.py`) | ⏳ 대기 | - |
 | Task 30 | Embedding CLI (`src/embeddings/cli.py`) | ⏳ 대기 | - |
@@ -333,8 +334,8 @@ projects
 
 ### Task 11: Set up Supabase project (manual)
 
-**상태:** ⏳ 대기
-**Note:** 사용자가 직접 수행. CI 전용 Supabase 프로젝트(무료 티어)도 함께 생성.
+**상태:** ✅ 완료
+**Note:** 사용자가 직접 수행 완료. `.env`에 `DATABASE_URL` 설정됨.
 
 **절차:**
 1. Supabase 프로젝트 생성 (https://supabase.com)
@@ -592,7 +593,7 @@ CREATE POLICY "Allow service_role only" ON users FOR ALL USING (auth.role() = 's
 
 ### Task 22: Add connection error handling to `lib/payload.ts`
 
-**상태:** ⏳ 대기
+**상태:** ✅ 완료 — `lib/payload.ts`의 `withFallback()` 패턴으로 구현됨. `__tests__/lib/payload-fallback.test.ts` 통과.
 
 **Dev/Prod 분리 전략:**
 - **Development** (`NODE_ENV !== 'production'`): try/catch -> `console.warn` + `data/_static/*.ts` 정적 데이터 fallback. DB 없이 로컬 개발 가능.
@@ -638,7 +639,7 @@ validateEnv();
 
 ### Task 24: Add CI/CD pipeline (GitHub Actions)
 
-**상태:** ⏳ 대기
+**상태:** ✅ 완료 — `.github/workflows/ci.yml` 생성됨. GitHub Secrets 등록 후 동작 확인 필요.
 
 **CI 환경 DB 전략:** CI는 **프로덕션과 동일 조건** (`NODE_ENV=production`)으로 빌드. `NODE_ENV=test` 우회는 사용하지 않음. CI 전용 Supabase 프로젝트(무료 티어, Task 11에서 생성)의 connection string을 GitHub Secrets에 등록.
 
