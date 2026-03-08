@@ -102,9 +102,9 @@
 | Task 40 | API proxy route (`app/api/chat/route.ts`) | ✅ 완료 | (미커밋) |
 | Task 41 | Streaming proxy route (`app/api/chat/stream/route.ts`) | ✅ 완료 | (미커밋) |
 | Task 42 | `useChatbot` hook (`hooks/useChatbot.ts`) | ✅ 완료 | (미커밋) |
-| Task 43 | ChatMessage component (`components/chat/ChatMessage.tsx`) | ⏳ 대기 | - |
-| Task 44 | ChatBot panel (`components/chat/ChatBot.tsx`) | ⏳ 대기 | - |
-| Task 45 | Integrate into layout | ⏳ 대기 | - |
+| Task 43 | ChatMessage component (`components/chat/ChatMessage.tsx`) | ✅ 완료 | (미커밋) |
+| Task 44 | ChatBot panel (`components/chat/ChatBot.tsx`) | ✅ 완료 | (미커밋) |
+| Task 45 | Integrate into layout | ✅ 완료 | (미커밋) |
 | Task 46 | Final environment config | ⏳ 대기 | - |
 
 #### Phase 5: Deployment & Hardening (Tasks 47-51)

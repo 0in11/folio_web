@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans, Syne, JetBrains_Mono } from "next/font/google";
+import { Plus_Jakarta_Sans, Space_Grotesk, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/layout/Header";
+import ChatBot from "@/components/chat/ChatBot";
+import { SITE_URL } from "@/lib/constants";
 
-const syne = Syne({
+const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
-  variable: "--font-syne",
-  weight: ["600", "700"],
+  variable: "--font-space-grotesk",
+  weight: ["500", "600", "700"],
   display: "swap",
 });
 
@@ -24,11 +26,9 @@ const jetbrainsMono = JetBrains_Mono({
   display: "swap",
 });
 
-const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://youngin-jin.vercel.app";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
+  metadataBase: new URL(SITE_URL),
   title: "Jin YoungIn | AI Engineer Portfolio",
   description:
     "AI Engineer focused on RAG, agents, LLMOps, and domain-specific AI systems.",
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     title: "Jin YoungIn | AI Engineer Portfolio",
     description:
       "AI Engineer focused on RAG, agents, LLMOps, and domain-specific AI systems.",
-    url: siteUrl,
+    url: SITE_URL,
   },
   twitter: {
     card: "summary_large_image",
@@ -64,7 +64,7 @@ export default function RootLayout({
   return (
     <html
       lang="ko"
-      className={`${syne.variable} ${jakartaSans.variable} ${jetbrainsMono.variable}`}
+      className={`${spaceGrotesk.variable} ${jakartaSans.variable} ${jetbrainsMono.variable}`}
     >
       <body className="bg-bg-primary text-text-primary antialiased">
         <a
@@ -75,6 +75,7 @@ export default function RootLayout({
         </a>
         <Header />
         <main id="main-content">{children}</main>
+        <ChatBot />
       </body>
     </html>
   );
