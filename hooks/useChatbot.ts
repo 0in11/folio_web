@@ -185,7 +185,7 @@ export function useChatbot(): UseChatbotReturn {
         done = result.done;
 
         if (result.value) {
-          sseBuffer += decoder.decode(result.value, { stream: true });
+          sseBuffer += decoder.decode(result.value, { stream: true }).replace(/\r\n/g, "\n");
           const parts = sseBuffer.split("\n\n");
           sseBuffer = parts.pop() ?? "";
 
