@@ -27,6 +27,9 @@ WORKDIR /app
 # Copy virtual environment and project files from builder
 COPY --from=builder /app /app
 
+# Make venv binaries available directly
+ENV PATH="/app/.venv/bin:$PATH"
+
 # Own files by app user
 RUN chown -R app:app /app
 
@@ -34,4 +37,4 @@ USER app
 
 EXPOSE 8000
 
-CMD ["sh", "-c", "uv run --frozen --no-dev uvicorn src.api:app --host 0.0.0.0 --port ${PORT:-8000}"]
+CMD ["sh", "-c", "uvicorn src.api:app --host 0.0.0.0 --port ${PORT:-8000}"]
