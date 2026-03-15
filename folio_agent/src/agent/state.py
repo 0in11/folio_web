@@ -18,3 +18,4 @@ class AgentState(MessagesState):
     query_type: Literal["portfolio", "general", "off_topic"] | None
     retrieved_context: str
     source_documents: list[dict]
+    retrieval_scores: list[float]

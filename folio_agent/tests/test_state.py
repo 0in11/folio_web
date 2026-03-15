@@ -28,6 +28,10 @@ class TestAgentStateFields:
         hints = typing.get_type_hints(AgentState)
         assert "source_documents" in hints
 
+    def test_has_retrieval_scores_field(self) -> None:
+        hints = typing.get_type_hints(AgentState)
+        assert "retrieval_scores" in hints
+
 
 class TestAgentStateDefaults:
     """AgentState should be instantiable with sensible defaults."""
@@ -38,11 +42,13 @@ class TestAgentStateDefaults:
             "query_type": None,
             "retrieved_context": "",
             "source_documents": [],
+            "retrieval_scores": [],
         }
         assert state["messages"] == []
         assert state["query_type"] is None
         assert state["retrieved_context"] == ""
         assert state["source_documents"] == []
+        assert state["retrieval_scores"] == []
 
     def test_with_messages(self) -> None:
         msg = HumanMessage(content="Hello")
@@ -51,10 +57,12 @@ class TestAgentStateDefaults:
             "query_type": "portfolio",
             "retrieved_context": "some context",
             "source_documents": [{"title": "doc1"}],
+            "retrieval_scores": [0.25],
         }
         assert len(state["messages"]) == 1
         assert state["messages"][0].content == "Hello"
         assert state["query_type"] == "portfolio"
+        assert state["retrieval_scores"] == [0.25]
 
     def test_query_type_accepts_all_literals(self) -> None:
         for qt in ("portfolio", "general", "off_topic", None):
@@ -63,6 +71,7 @@ class TestAgentStateDefaults:
                 "query_type": qt,
                 "retrieved_context": "",
                 "source_documents": [],
+                "retrieval_scores": [],
             }
             assert state["query_type"] == qt
 

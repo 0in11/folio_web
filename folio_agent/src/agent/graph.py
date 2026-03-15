@@ -10,28 +10,15 @@ from src.agent.nodes.router import route
 from src.agent.state import AgentState
 
 
-def _route_by_query_type(state: AgentState) -> str:
-    """Direct the graph based on the classified query type.
-
-    Returns the name of the next node to execute:
-    - ``"retrieve"`` for portfolio queries (need RAG context)
-    - ``"generate"`` for general or off_topic queries (direct response)
-    """
-    if state.get("query_type") == "portfolio":
-        return "retrieve"
-    return "generate"
-
-
 def create_graph() -> StateGraph:
     """Build and compile the portfolio chatbot graph.
 
     Graph structure::
 
-        START -> router -> conditional_edge -> [
-            portfolio:  retrieve -> generate,
-            general:    generate,
-            off_topic:  generate,
-        ] -> END
+        START -> retrieve -> router -> generate -> END
+
+    All queries go through retrieval first, then the router classifies
+    using both the query and retrieval results (retrieve-then-route).
 
     Returns:
         A compiled LangGraph ``CompiledStateGraph`` with an
@@ -43,21 +30,14 @@ def create_graph() -> StateGraph:
     graph = StateGraph(AgentState)
 
     # Add nodes
-    graph.add_node("router", route)
     graph.add_node("retrieve", retrieve)
+    graph.add_node("router", route)
     graph.add_node("generate", generate)
 
-    # Wire edges
-    graph.add_edge(START, "router")
-    graph.add_conditional_edges(
-        "router",
-        _route_by_query_type,
-        {
-            "retrieve": "retrieve",
-            "generate": "generate",
-        },
-    )
-    graph.add_edge("retrieve", "generate")
+    # Wire linear edges: retrieve -> router -> generate
+    graph.add_edge(START, "retrieve")
+    graph.add_edge("retrieve", "router")
+    graph.add_edge("router", "generate")
     graph.add_edge("generate", END)
 
     # Compile with in-memory checkpointer for conversation memory

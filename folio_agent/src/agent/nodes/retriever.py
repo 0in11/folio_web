@@ -6,10 +6,13 @@ search against the portfolio_embeddings table.
 
 from __future__ import annotations
 
+import logging
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
 from openai import OpenAI
+
+logger = logging.getLogger(__name__)
 
 from src.agent.utils import extract_last_user_text
 from src.config import get_settings
@@ -48,14 +51,16 @@ def _search_similar(
         top_k: Number of results to return.
 
     Returns:
-        A list of dicts with content, source_type, source_id, and metadata.
+        A list of dicts with content, source_type, source_id, metadata,
+        and distance (cosine distance from pgvector).
     """
     conn = get_connection(database_url)
     try:
         rows = conn.execute(
-            "SELECT content, source_type, source_id, metadata "
+            "SELECT content, source_type, source_id, metadata, "
+            "embedding <=> %s AS distance "
             "FROM portfolio_embeddings "
-            "ORDER BY embedding <=> %s "
+            "ORDER BY distance "
             "LIMIT %s",
             (np.array(query_embedding), top_k),
         ).fetchall()
@@ -68,6 +73,7 @@ def _search_similar(
             "source_type": row[1],
             "source_id": row[2],
             "metadata": row[3] if row[3] is not None else {},
+            "distance": float(row[4]),
         }
         for row in rows
     ]
@@ -96,6 +102,7 @@ def retrieve(state: AgentState) -> dict[str, Any]:
         return {
             "retrieved_context": "",
             "source_documents": [],
+            "retrieval_scores": [],
         }
 
     # Embed the query
@@ -107,10 +114,19 @@ def retrieve(state: AgentState) -> dict[str, Any]:
 
     # Search for similar documents
     results = _search_similar(
-        database_url=settings.database_url,
+        database_url=settings.agent_database_url,
         query_embedding=query_embedding,
         top_k=settings.top_k,
     )
+
+    # Log retrieval results
+    logger.info("── retrieve | query=%r | hits=%d", query, len(results))
+    for i, doc in enumerate(results, 1):
+        snippet = doc["content"][:80].replace("\n", " ")
+        logger.info(
+            "  [%d] type=%-12s dist=%.4f | %s",
+            i, doc["source_type"], doc["distance"], snippet,
+        )
 
     # Build context string and source documents list
     context_parts = [doc["content"] for doc in results]
@@ -126,4 +142,5 @@ def retrieve(state: AgentState) -> dict[str, Any]:
     return {
         "retrieved_context": "\n\n".join(context_parts),
         "source_documents": source_documents,
+        "retrieval_scores": [doc["distance"] for doc in results],
     }

@@ -2,7 +2,8 @@
 
 LLM inference uses Anthropic Claude (ANTHROPIC_API_KEY).
 Embeddings use OpenAI (OPENAI_API_KEY).
-Vector storage uses PostgreSQL with pgvector (DATABASE_URL).
+Vector storage uses PostgreSQL with pgvector (AGENT_DATABASE_URL).
+Content is read from Payload CMS database (PAYLOAD_DATABASE_URL).
 """
 
 from functools import lru_cache
@@ -18,7 +19,8 @@ class Settings(BaseSettings):
     # --- Required keys ---
     anthropic_api_key: str
     openai_api_key: str
-    database_url: str
+    payload_database_url: str   # Payload CMS DB (읽기 전용)
+    agent_database_url: str     # Agent 전용 DB (임베딩 저장)
 
     # --- LLM defaults ---
     claude_model: str = "claude-sonnet-4-20250514"

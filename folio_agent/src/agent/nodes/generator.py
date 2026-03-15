@@ -27,6 +27,15 @@ You are a helpful technology and AI assistant on YoungIn Jin's portfolio website
 Answer the user's general technology or AI question clearly and concisely.
 Do not fabricate information about YoungIn Jin or the portfolio."""
 
+_GENERAL_WITH_CONTEXT_PROMPT = """\
+You are a helpful technology and AI assistant on YoungIn Jin's portfolio website.
+Answer the user's general technology or AI question clearly and concisely.
+You may reference the following related portfolio context if it adds value \
+to your answer, but do not force it. Do not fabricate information.
+
+--- Related Portfolio Context ---
+{context}"""
+
 _OFF_TOPIC_SYSTEM_PROMPT = """\
 You are an assistant on YoungIn Jin's AI engineer portfolio website.
 The user's message is outside the scope of this chatbot.
@@ -35,14 +44,24 @@ projects, skills, career, or general technology and AI topics instead.
 Keep your response brief and friendly."""
 
 
-def _build_system_prompt(query_type: str | None, retrieved_context: str) -> str:
-    """Build the system prompt based on query type and available context."""
+def _build_system_prompt(
+    query_type: str | None,
+    retrieved_context: str,
+    retrieval_scores: list[float],
+) -> str:
+    """Build the system prompt based on query type, context, and scores."""
     if query_type == "portfolio":
         return _PORTFOLIO_SYSTEM_PROMPT.format(context=retrieved_context or "No context available.")
     if query_type == "general":
+        has_relevant_context = (
+            retrieval_scores
+            and min(retrieval_scores) < 0.7
+            and retrieved_context
+        )
+        if has_relevant_context:
+            return _GENERAL_WITH_CONTEXT_PROMPT.format(context=retrieved_context)
         return _GENERAL_SYSTEM_PROMPT
     return _OFF_TOPIC_SYSTEM_PROMPT
-
 
 
 def generate(state: AgentState) -> dict[str, Any]:
@@ -54,10 +73,11 @@ def generate(state: AgentState) -> dict[str, Any]:
     """
     query_type = state.get("query_type")
     retrieved_context = state.get("retrieved_context", "")
+    retrieval_scores = state.get("retrieval_scores", [])
     messages = state.get("messages", [])
     last_message = extract_last_user_text(messages)
 
-    system_prompt = _build_system_prompt(query_type, retrieved_context)
+    system_prompt = _build_system_prompt(query_type, retrieved_context, retrieval_scores)
 
     settings = get_settings()
     client = anthropic.Anthropic(api_key=settings.anthropic_api_key)

@@ -15,7 +15,8 @@ def _make_settings(**overrides) -> Settings:
     defaults = {
         "anthropic_api_key": "test-anthropic-key",
         "openai_api_key": "test-openai-key",
-        "database_url": "postgresql://localhost/test",
+        "payload_database_url": "postgresql://localhost/payload",
+        "agent_database_url": "postgresql://localhost/agent",
     }
     return Settings(**{**defaults, **overrides})
 
@@ -42,7 +43,7 @@ class TestRetrieveSuccess:
     @patch("src.agent.nodes.retriever.get_settings")
     @patch("src.agent.nodes.retriever.get_connection")
     @patch("src.agent.nodes.retriever.OpenAI")
-    def test_returns_context_and_sources(
+    def test_returns_context_sources_and_scores(
         self, mock_openai_cls, mock_get_conn, mock_get_settings
     ):
         settings = _make_settings()
@@ -57,12 +58,12 @@ class TestRetrieveSuccess:
             data=[embed_item],
         )
 
-        # Mock DB connection and query results
+        # Mock DB connection and query results (now includes distance column)
         mock_conn = MagicMock()
         mock_get_conn.return_value = mock_conn
         mock_conn.execute.return_value.fetchall.return_value = [
-            ("Project A description", "project", "1", {"title": "Project A"}),
-            ("Skill B description", "skill", "2", {"name": "Python"}),
+            ("Project A description", "project", "1", {"title": "Project A"}, 0.25),
+            ("Skill B description", "skill", "2", {"name": "Python"}, 0.45),
         ]
 
         from src.agent.nodes.retriever import retrieve
@@ -77,6 +78,9 @@ class TestRetrieveSuccess:
         assert result["source_documents"][0]["source_id"] == "1"
         assert result["source_documents"][0]["metadata"] == {"title": "Project A"}
         assert result["source_documents"][1]["source_type"] == "skill"
+
+        # Verify retrieval_scores
+        assert result["retrieval_scores"] == [0.25, 0.45]
 
         # Verify DB connection was closed
         mock_conn.close.assert_called_once()
@@ -144,6 +148,7 @@ class TestRetrieveEmpty:
 
         assert result["retrieved_context"] == ""
         assert result["source_documents"] == []
+        assert result["retrieval_scores"] == []
 
     @patch("src.agent.nodes.retriever.get_settings")
     def test_no_user_message(self, mock_get_settings):
@@ -156,6 +161,7 @@ class TestRetrieveEmpty:
 
         assert result["retrieved_context"] == ""
         assert result["source_documents"] == []
+        assert result["retrieval_scores"] == []
 
 
 # ---------------------------------------------------------------------------
@@ -196,6 +202,7 @@ class TestRetrieveEmbeddingDimension:
         params = call_args[0][1]
 
         assert "<=>" in sql
+        assert "AS distance" in sql
         assert "LIMIT" in sql
         # The numpy array should contain our embedding values
         import numpy as np
@@ -256,7 +263,7 @@ class TestRetrieveNullMetadata:
         mock_conn = MagicMock()
         mock_get_conn.return_value = mock_conn
         mock_conn.execute.return_value.fetchall.return_value = [
-            ("content", "type", "id", None),
+            ("content", "type", "id", None, 0.3),
         ]
 
         from src.agent.nodes.retriever import retrieve
@@ -265,3 +272,4 @@ class TestRetrieveNullMetadata:
         result = retrieve(state)
 
         assert result["source_documents"][0]["metadata"] == {}
+        assert result["retrieval_scores"] == [0.3]

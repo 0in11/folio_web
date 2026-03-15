@@ -8,7 +8,8 @@ from src.config import Settings
 _REQUIRED_ENV = {
     "ANTHROPIC_API_KEY": "sk-ant-test-key",
     "OPENAI_API_KEY": "sk-openai-test-key",
-    "DATABASE_URL": "postgresql://user:pass@localhost:5432/testdb",
+    "PAYLOAD_DATABASE_URL": "postgresql://user:pass@localhost:5432/payloaddb",
+    "AGENT_DATABASE_URL": "postgresql://user:pass@localhost:5432/agentdb",
 }
 
 
@@ -27,7 +28,8 @@ class TestSettingsDefaults:
         s = Settings()
         assert s.anthropic_api_key == "sk-ant-test-key"
         assert s.openai_api_key == "sk-openai-test-key"
-        assert s.database_url == "postgresql://user:pass@localhost:5432/testdb"
+        assert s.payload_database_url == "postgresql://user:pass@localhost:5432/payloaddb"
+        assert s.agent_database_url == "postgresql://user:pass@localhost:5432/agentdb"
 
     @pytest.mark.usefixtures("_set_required_env")
     def test_claude_model_default(self) -> None:
@@ -83,21 +85,32 @@ class TestSettingsMissingRequired:
 
     def test_missing_anthropic_key(self, monkeypatch: pytest.MonkeyPatch) -> None:
         monkeypatch.setenv("OPENAI_API_KEY", "sk-openai-test-key")
-        monkeypatch.setenv("DATABASE_URL", "postgresql://localhost/db")
+        monkeypatch.setenv("PAYLOAD_DATABASE_URL", "postgresql://localhost/db")
+        monkeypatch.setenv("AGENT_DATABASE_URL", "postgresql://localhost/db")
         monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
         with pytest.raises(Exception):
             Settings()
 
     def test_missing_openai_key(self, monkeypatch: pytest.MonkeyPatch) -> None:
         monkeypatch.setenv("ANTHROPIC_API_KEY", "sk-ant-test-key")
-        monkeypatch.setenv("DATABASE_URL", "postgresql://localhost/db")
+        monkeypatch.setenv("PAYLOAD_DATABASE_URL", "postgresql://localhost/db")
+        monkeypatch.setenv("AGENT_DATABASE_URL", "postgresql://localhost/db")
         monkeypatch.delenv("OPENAI_API_KEY", raising=False)
         with pytest.raises(Exception):
             Settings()
 
-    def test_missing_database_url(self, monkeypatch: pytest.MonkeyPatch) -> None:
+    def test_missing_payload_database_url(self, monkeypatch: pytest.MonkeyPatch) -> None:
         monkeypatch.setenv("ANTHROPIC_API_KEY", "sk-ant-test-key")
         monkeypatch.setenv("OPENAI_API_KEY", "sk-openai-test-key")
-        monkeypatch.delenv("DATABASE_URL", raising=False)
+        monkeypatch.setenv("AGENT_DATABASE_URL", "postgresql://localhost/db")
+        monkeypatch.delenv("PAYLOAD_DATABASE_URL", raising=False)
+        with pytest.raises(Exception):
+            Settings()
+
+    def test_missing_agent_database_url(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        monkeypatch.setenv("ANTHROPIC_API_KEY", "sk-ant-test-key")
+        monkeypatch.setenv("OPENAI_API_KEY", "sk-openai-test-key")
+        monkeypatch.setenv("PAYLOAD_DATABASE_URL", "postgresql://localhost/db")
+        monkeypatch.delenv("AGENT_DATABASE_URL", raising=False)
         with pytest.raises(Exception):
             Settings()

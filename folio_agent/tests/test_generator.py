@@ -46,6 +46,7 @@ def _make_state(
     user_text: str,
     query_type: str | None,
     retrieved_context: str = "",
+    retrieval_scores: list[float] | None = None,
 ) -> dict:
     """Build a minimal AgentState-compatible dict."""
     return {
@@ -53,6 +54,7 @@ def _make_state(
         "query_type": query_type,
         "retrieved_context": retrieved_context,
         "source_documents": [],
+        "retrieval_scores": retrieval_scores or [],
     }
 
 
@@ -72,6 +74,7 @@ class TestGeneratorPortfolio:
             "Tell me about Jin's experience",
             query_type="portfolio",
             retrieved_context=context,
+            retrieval_scores=[0.2],
         )
         result = generate(state)
 
@@ -92,6 +95,7 @@ class TestGeneratorPortfolio:
             "What are Jin's skills?",
             query_type="portfolio",
             retrieved_context="Skills: Python, ML",
+            retrieval_scores=[0.15],
         )
         generate(state)
 
@@ -103,7 +107,7 @@ class TestGeneratorGeneral:
     """Generator should not include portfolio context for general queries."""
 
     @respx.mock
-    def test_general_no_portfolio_context(self) -> None:
+    def test_general_no_portfolio_context_high_distance(self) -> None:
         route = respx.post(_ANTHROPIC_MESSAGES_URL).mock(
             return_value=_mock_generation_response(
                 "A transformer uses self-attention mechanisms.",
@@ -114,6 +118,7 @@ class TestGeneratorGeneral:
             "How does a transformer work?",
             query_type="general",
             retrieved_context="Some portfolio context that should not appear.",
+            retrieval_scores=[0.9],  # high distance = low relevance
         )
         result = generate(state)
 
@@ -122,8 +127,41 @@ class TestGeneratorGeneral:
         # Verify portfolio context is NOT in the system prompt
         request_body = route.calls[0].request.read()
         assert b"Some portfolio context that should not appear" not in request_body
-        # Verify it uses the general system prompt
-        assert b"general technology" in request_body.lower() or b"technology" in request_body
+
+    @respx.mock
+    def test_general_with_relevant_context(self) -> None:
+        """When general query has low-distance retrieval, include context."""
+        route = respx.post(_ANTHROPIC_MESSAGES_URL).mock(
+            return_value=_mock_generation_response(
+                "Domain-specific LLMs are fine-tuned for specific tasks.",
+            ),
+        )
+
+        state = _make_state(
+            "Tell me about domain-specific LLMs",
+            query_type="general",
+            retrieved_context="YoungIn Jin's domain-specific LLM fine-tuning project.",
+            retrieval_scores=[0.3],  # low distance = high relevance
+        )
+        result = generate(state)
+
+        assert result["messages"][0].content == "Domain-specific LLMs are fine-tuned for specific tasks."
+
+        # Verify the related context IS included in the system prompt
+        request_body = route.calls[0].request.read()
+        assert b"Related Portfolio Context" in request_body
+        assert b"domain-specific LLM fine-tuning project" in request_body
+
+    @respx.mock
+    def test_general_no_scores_uses_default_prompt(self) -> None:
+        route = respx.post(_ANTHROPIC_MESSAGES_URL).mock(
+            return_value=_mock_generation_response("Response."),
+        )
+        state = _make_state("Explain neural networks", query_type="general")
+        generate(state)
+
+        request_body = route.calls[0].request.read()
+        assert b"technology" in request_body.lower() or b"Technology" in request_body
 
     @respx.mock
     def test_general_max_tokens_is_1024(self) -> None:
@@ -199,6 +237,7 @@ class TestGeneratorEdgeCases:
             "query_type": "general",
             "retrieved_context": "",
             "source_documents": [],
+            "retrieval_scores": [],
         }
         result = generate(state)
 
