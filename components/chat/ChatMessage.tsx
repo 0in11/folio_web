@@ -3,6 +3,7 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { type ChatMessage } from "@/hooks/useChatbot";
 import { cn } from "@/lib/utils";
+import ChatMarkdown from "./ChatMarkdown";
 
 interface ChatMessageProps {
   readonly message: ChatMessage;
@@ -52,7 +53,13 @@ export default function ChatMessageBubble({ message }: ChatMessageProps) {
               : "bg-bg-surface border border-border-subtle text-text-primary rounded-tr-2xl rounded-br-2xl rounded-tl-sm rounded-bl-2xl"
           )}
         >
-          {isTyping ? <TypingIndicator /> : message.content}
+          {isTyping ? (
+            <TypingIndicator />
+          ) : isUser ? (
+            message.content
+          ) : (
+            <ChatMarkdown content={message.content} />
+          )}
         </div>
       </div>
     </motion.div>

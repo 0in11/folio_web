@@ -3,8 +3,16 @@
 from __future__ import annotations
 
 import json
+from decimal import Decimal
 
 import psycopg
+
+
+class _DecimalEncoder(json.JSONEncoder):
+    def default(self, o: object) -> object:
+        if isinstance(o, Decimal):
+            return float(o)
+        return super().default(o)
 from openai import OpenAI
 
 from src.config import Settings
@@ -74,7 +82,7 @@ def store_embeddings(
                 chunk.content,
                 chunk.source_type,
                 chunk.source_id,
-                json.dumps(chunk.metadata),
+                json.dumps(chunk.metadata, cls=_DecimalEncoder),
                 embedding,
             )
             for chunk, embedding in zip(chunks, embeddings, strict=True)
