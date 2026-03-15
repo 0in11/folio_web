@@ -38,6 +38,7 @@ export interface Project {
   keyAchievement: string;
   featured: boolean;
   detail?: ProjectDetail;
+  markdownContent?: string;
   links?: {
     github?: string;
     demo?: string;

@@ -51,6 +51,11 @@ export const Projects: CollectionConfig = {
       ],
     },
     {
+      name: "markdownContent",
+      type: "textarea",
+      admin: { description: "프로젝트 상세 마크다운 (시드 스크립트에서 자동 생성)" },
+    },
+    {
       name: "detail",
       type: "group",
       fields: [

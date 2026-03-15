@@ -13,12 +13,13 @@ import { Publications } from '../collections/Publications.ts'
 import { Certifications } from '../collections/Certifications.ts'
 
 import { projects } from '../data/_static/projects.ts'
+import { loadMarkdownFromFile } from '../lib/markdown-cleanup.ts'
 import { careerHistory } from '../data/_static/career.ts'
 import { skillGroups } from '../data/_static/skills.ts'
 import { education, certifications } from '../data/_static/education.ts'
 import { awards, publications } from '../data/_static/awards.ts'
 
-import type { Payload } from 'payload'
+import type { Payload, Where } from 'payload'
 import type { DetailSection, ProjectDetail } from '../data/projects.ts'
 
 interface PayloadTableHeaders {
@@ -62,29 +63,48 @@ if (process.env.NODE_ENV === 'production' && !process.env.PAYLOAD_ADMIN_PASSWORD
 
 function transformSection(section: DetailSection): PayloadSection {
   const { tableHeaders, ...rest } = section
-
-  const result: PayloadSection = { ...rest }
-
-  if (tableHeaders) {
-    result.tableHeaders = {
-      col0: tableHeaders[0],
-      col1: tableHeaders[1],
-    }
+  return {
+    ...rest,
+    ...(tableHeaders ? { tableHeaders: { col0: tableHeaders[0], col1: tableHeaders[1] } } : {}),
   }
-
-  return result
 }
 
 function transformDetail(detail: ProjectDetail): PayloadDetail {
   const { sections, ...rest } = detail
-
-  const result: PayloadDetail = { ...rest }
-
-  if (sections) {
-    result.sections = sections.map(transformSection)
+  return {
+    ...rest,
+    ...(sections ? { sections: sections.map(transformSection) } : {}),
   }
+}
 
-  return result
+async function seedCollection<T>(
+  payload: SeedClient,
+  collectionSlug: string,
+  label: string,
+  items: T[],
+  findWhere: (item: T) => Where,
+  toLabel: (item: T) => string,
+  toData: (item: T, index: number) => Promise<Record<string, unknown>> | Record<string, unknown>,
+): Promise<void> {
+  console.log(`--- Seeding ${label} ---`)
+  for (let i = 0; i < items.length; i++) {
+    const item = items[i]
+    const existing = await payload.find({
+      collection: collectionSlug as 'users',
+      where: findWhere(item),
+      limit: 1,
+    })
+    if (existing.totalDocs > 0) {
+      console.log(`  skip: ${toLabel(item)}`)
+      continue
+    }
+    const data = await toData(item, i)
+    await payload.create({
+      collection: collectionSlug as 'users',
+      data,
+    })
+    console.log(`  created: ${toLabel(item)}`)
+  }
 }
 
 export async function ensureAdminUser(payload: SeedClient) {
@@ -113,187 +133,114 @@ export async function seed(payloadClient: SeedClient) {
 
   await ensureAdminUser(payload)
 
-  console.log('--- Seeding Projects ---')
-  for (const project of projects) {
-    const existing = await payload.find({
-      collection: 'projects',
-      where: { projectId: { equals: project.id } },
-      limit: 1,
-    })
-    if (existing.totalDocs > 0) {
-      console.log(`  skip: ${project.title}`)
-      continue
-    }
-    await payload.create({
-      collection: 'projects',
-      data: {
-        projectId: project.id,
-        title: project.title,
-        slug: project.slug,
-        company: project.company,
-        description: project.description,
-        period: project.period,
-        teamSize: project.teamSize,
-        keyAchievement: project.keyAchievement,
-        featured: project.featured,
-        technologies: project.technologies.map((t) => ({ value: t })),
-        links: project.links ?? {},
-        detail: project.detail ? transformDetail(project.detail) : {},
-      },
-    })
-    console.log(`  created: ${project.title}`)
-  }
+  await seedCollection(
+    payload, 'projects', 'Projects', projects,
+    (p) => ({ projectId: { equals: p.id } }),
+    (p) => p.title,
+    async (p) => {
+      const markdownContent = p.markdownPath
+        ? await loadMarkdownFromFile(p.markdownPath, p.imageMap)
+        : null
+      return {
+        projectId: p.id,
+        title: p.title,
+        slug: p.slug,
+        company: p.company,
+        description: p.description,
+        period: p.period,
+        teamSize: p.teamSize,
+        keyAchievement: p.keyAchievement,
+        featured: p.featured,
+        technologies: p.technologies.map((t) => ({ value: t })),
+        links: p.links ?? {},
+        detail: p.detail ? transformDetail(p.detail) : {},
+        ...(markdownContent ? { markdownContent } : {}),
+      }
+    },
+  )
 
-  console.log('--- Seeding Career ---')
-  for (let i = 0; i < careerHistory.length; i++) {
-    const item = careerHistory[i]
-    const existing = await payload.find({
-      collection: 'career',
-      where: {
-        and: [
-          { company: { equals: item.company } },
-          { role: { equals: item.role } },
-          { period: { equals: item.period } },
-        ],
-      },
-      limit: 1,
-    })
-    if (existing.totalDocs > 0) {
-      console.log(`  skip: ${item.company} - ${item.role}`)
-      continue
-    }
-    await payload.create({
-      collection: 'career',
-      data: {
-        period: item.period,
-        company: item.company,
-        role: item.role,
-        current: item.current ?? false,
-        sortOrder: i,
-        keywords: item.keywords.map((k) => ({ value: k })),
-      },
-    })
-    console.log(`  created: ${item.company} - ${item.role}`)
-  }
+  await seedCollection(
+    payload, 'career', 'Career', careerHistory,
+    (item) => ({
+      and: [
+        { company: { equals: item.company } },
+        { role: { equals: item.role } },
+        { period: { equals: item.period } },
+      ] as Where[],
+    }),
+    (item) => `${item.company} - ${item.role}`,
+    (item, i) => ({
+      period: item.period,
+      company: item.company,
+      role: item.role,
+      current: item.current ?? false,
+      sortOrder: i,
+      keywords: item.keywords.map((k) => ({ value: k })),
+    }),
+  )
 
-  console.log('--- Seeding Skills ---')
-  for (let i = 0; i < skillGroups.length; i++) {
-    const group = skillGroups[i]
-    const existing = await payload.find({
-      collection: 'skills',
-      where: { label: { equals: group.label } },
-      limit: 1,
-    })
-    if (existing.totalDocs > 0) {
-      console.log(`  skip: ${group.label}`)
-      continue
-    }
-    await payload.create({
-      collection: 'skills',
-      data: {
-        label: group.label,
-        description: group.description,
-        sortOrder: i,
-        items: group.items.map((v) => ({ value: v })),
-      },
-    })
-    console.log(`  created: ${group.label}`)
-  }
+  await seedCollection(
+    payload, 'skills', 'Skills', skillGroups,
+    (g) => ({ label: { equals: g.label } }),
+    (g) => g.label,
+    (g, i) => ({
+      label: g.label,
+      description: g.description,
+      sortOrder: i,
+      items: g.items.map((v) => ({ value: v })),
+    }),
+  )
 
-  console.log('--- Seeding Education ---')
-  for (const edu of education) {
-    const existing = await payload.find({
-      collection: 'education',
-      where: {
-        and: [
-          { institution: { equals: edu.institution } },
-          { degree: { equals: edu.degree } },
-        ],
-      },
-      limit: 1,
-    })
-    if (existing.totalDocs > 0) {
-      console.log(`  skip: ${edu.institution}`)
-      continue
-    }
-    await payload.create({
-      collection: 'education',
-      data: {
-        institution: edu.institution,
-        degree: edu.degree,
-        gpa: edu.gpa,
-        period: edu.period,
-      },
-    })
-    console.log(`  created: ${edu.institution}`)
-  }
+  await seedCollection(
+    payload, 'education', 'Education', education,
+    (edu) => ({
+      and: [
+        { institution: { equals: edu.institution } },
+        { degree: { equals: edu.degree } },
+      ] as Where[],
+    }),
+    (edu) => edu.institution,
+    (edu) => ({
+      institution: edu.institution,
+      degree: edu.degree,
+      gpa: edu.gpa,
+      period: edu.period,
+    }),
+  )
 
-  console.log('--- Seeding Certifications ---')
-  for (const cert of certifications) {
-    const existing = await payload.find({
-      collection: 'certifications',
-      where: { name: { equals: cert.name } },
-      limit: 1,
-    })
-    if (existing.totalDocs > 0) {
-      console.log(`  skip: ${cert.name}`)
-      continue
-    }
-    await payload.create({
-      collection: 'certifications',
-      data: {
-        name: cert.name,
-        date: cert.date,
-        issuer: cert.issuer,
-      },
-    })
-    console.log(`  created: ${cert.name}`)
-  }
+  await seedCollection(
+    payload, 'certifications', 'Certifications', certifications,
+    (cert) => ({ name: { equals: cert.name } }),
+    (cert) => cert.name,
+    (cert) => ({
+      name: cert.name,
+      date: cert.date,
+      issuer: cert.issuer,
+    }),
+  )
 
-  console.log('--- Seeding Awards ---')
-  for (const award of awards) {
-    const existing = await payload.find({
-      collection: 'awards',
-      where: { title: { equals: award.title } },
-      limit: 1,
-    })
-    if (existing.totalDocs > 0) {
-      console.log(`  skip: ${award.title}`)
-      continue
-    }
-    await payload.create({
-      collection: 'awards',
-      data: {
-        title: award.title,
-        date: award.date,
-        organizer: award.organizer,
-      },
-    })
-    console.log(`  created: ${award.title}`)
-  }
+  await seedCollection(
+    payload, 'awards', 'Awards', awards,
+    (a) => ({ title: { equals: a.title } }),
+    (a) => a.title,
+    (a) => ({
+      title: a.title,
+      date: a.date,
+      organizer: a.organizer,
+    }),
+  )
 
-  console.log('--- Seeding Publications ---')
-  for (const pub of publications) {
-    const existing = await payload.find({
-      collection: 'publications',
-      where: { title: { equals: pub.title } },
-      limit: 1,
-    })
-    if (existing.totalDocs > 0) {
-      console.log(`  skip: ${pub.title}`)
-      continue
-    }
-    await payload.create({
-      collection: 'publications',
-      data: {
-        title: pub.title,
-        journal: pub.journal,
-        year: pub.year,
-        doi: pub.doi ?? undefined,
-      },
-    })
-    console.log(`  created: ${pub.title}`)
-  }
+  await seedCollection(
+    payload, 'publications', 'Publications', publications,
+    (pub) => ({ title: { equals: pub.title } }),
+    (pub) => pub.title,
+    (pub) => ({
+      title: pub.title,
+      journal: pub.journal,
+      year: pub.year,
+      doi: pub.doi ?? undefined,
+    }),
+  )
 
   console.log('--- Seed complete ---')
 }

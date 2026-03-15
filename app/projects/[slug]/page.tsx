@@ -1,10 +1,13 @@
 import { notFound } from "next/navigation";
 import { fetchProjectBySlug, fetchAllProjectSlugs } from "@/lib/payload";
+import { getProjectBySlug as getStaticProject } from "@/data/_static/projects";
+import { loadMarkdownFromFile } from "@/lib/markdown-cleanup";
 import type { DetailSection, ProjectImage } from "@/data/projects";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Badge from "@/components/ui/Badge";
 import FormattedContent from "@/components/ui/FormattedContent";
+import ProjectMarkdown from "@/components/ui/ProjectMarkdown";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
@@ -143,6 +146,17 @@ export default async function ProjectDetailPage({ params }: PageProps) {
 
   if (!project) notFound();
 
+  let markdownContent = project.markdownContent ?? null;
+  if (!markdownContent) {
+    const staticProject = getStaticProject(slug);
+    if (staticProject?.markdownPath) {
+      markdownContent = await loadMarkdownFromFile(
+        staticProject.markdownPath,
+        staticProject.imageMap,
+      );
+    }
+  }
+
   return (
     <div className="pt-24 pb-section px-6">
       <div className="max-w-article mx-auto">
@@ -192,8 +206,10 @@ export default async function ProjectDetailPage({ params }: PageProps) {
           <p className="text-text-primary">{project.keyAchievement}</p>
         </div>
 
-        {/* Detail Content */}
-        {project.detail ? (
+        {/* Detail Content — Markdown or Structured */}
+        {markdownContent ? (
+          <ProjectMarkdown content={markdownContent} />
+        ) : project.detail ? (
           project.detail.sections ? (
             <article className="space-y-12">
               {project.detail.sections.map((section) => (

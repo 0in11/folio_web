@@ -77,6 +77,7 @@ interface PayloadProjectDoc {
   featured?: boolean;
   technologies?: Array<{ value: string }> | null;
   links?: { github?: string | null; demo?: string | null; paper?: string | null } | null;
+  markdownContent?: string | null;
   detail?: PayloadProjectDetail | null;
 }
 
@@ -230,6 +231,7 @@ export function transformProject(doc: PayloadProjectDoc): Project {
           },
         }
       : {}),
+    ...(doc.markdownContent ? { markdownContent: doc.markdownContent } : {}),
     detail: transformDetail(doc.detail),
   };
 }
