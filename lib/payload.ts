@@ -301,7 +301,6 @@ export async function withFallback<T>(
     const message = error instanceof Error ? error.message : String(error);
     if (process.env.NODE_ENV !== "production") {
       if (!process.env.VITEST) {
-        // eslint-disable-next-line no-console
         console.warn(`[${label}] DB connection failed, using static fallback:`, message);
       }
       return fallbackFn();
