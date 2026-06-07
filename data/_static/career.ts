@@ -2,11 +2,17 @@ import type { CareerItem } from "@/data/career";
 
 export const careerHistory: CareerItem[] = [
   {
-    period: "2025.12 –",
+    period: "2026.04 –",
+    company: "메가존클라우드",
+    role: "매니저",
+    keywords: ["LLM", "Agent", "RAG", "AI 서비스 기획 및 설계"],
+    current: true,
+  },
+  {
+    period: "2025.12 – 2026.03",
     company: "슈어소프트테크",
     role: "전임연구원",
     keywords: ["GraphRAG", "sLLM", "LangGraph"],
-    current: true,
   },
   {
     period: "2025.09 – 2025.12",

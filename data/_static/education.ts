@@ -11,6 +11,11 @@ export const education: Education[] = [
 
 export const certifications: Certification[] = [
   {
+    name: "GCP Generative AI Leader",
+    date: "2026.05",
+    issuer: "Google Cloud",
+  },
+  {
     name: "AWS Certified AI Practitioner",
     date: "2026.02",
     issuer: "Amazon Web Services",

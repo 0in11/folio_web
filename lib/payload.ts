@@ -300,8 +300,8 @@ export async function withFallback<T>(
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     if (process.env.NODE_ENV !== "production") {
-      if (!process.env.VITEST) {
-        console.warn(`[${label}] DB connection failed, using static fallback:`, message);
+      if (process.env.PAYLOAD_FALLBACK_LOG === "1" && !process.env.VITEST) {
+        console.info(`[${label}] DB connection failed, using static fallback: ${message}`);
       }
       return fallbackFn();
     }

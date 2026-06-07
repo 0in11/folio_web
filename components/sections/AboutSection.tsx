@@ -9,19 +9,19 @@ import {
 
 const strengths = [
   {
-    title: "도메인 구조화",
+    title: "도메인 이해 기반 문제 정의",
     description:
-      "복잡한 도메인 지식을 빠르게 흡수하고, AI가 다룰 수 있는 구조로 정제합니다.",
+      "업무 맥락과 데이터 흐름을 먼저 이해하고, AI가 풀어야 할 문제를 구체화합니다.",
   },
   {
-    title: "시스템 연결",
+    title: "기획부터 아키텍처 설계까지",
     description:
-      "RAG, Agent, LLMOps를 개별 기술이 아닌 실서비스 문맥에서 통합합니다.",
+      "LLM, Agent, RAG를 서비스 목적에 맞게 조합하고, 운영 가능한 구조로 설계합니다.",
   },
   {
-    title: "제품 & 구현 관점",
+    title: "실행 가능한 AI 서비스 구현",
     description:
-      "엔지니어링 결정이 제품에 어떤 영향을 미치는지 함께 고려하며 설계합니다.",
+      "아이디어 단계에 머무르지 않고, 검증 가능한 프로토타입과 실제 동작하는 시스템까지 개발합니다.",
   },
 ];
 
@@ -57,15 +57,15 @@ export default async function AboutSection() {
                 id="about-heading"
                 className="font-display text-4xl md:text-5xl font-bold text-text-primary mb-6"
               >
-                도메인 지식을
+                도메인 이해에서
                 <br />
-                AI로 연결합니다.
+                AI 서비스 구현까지.
               </h2>
               <p className="text-text-secondary leading-relaxed mb-8">
-                실제 현장에서 쓰이는 AI 시스템을 만드는 것을 목표로 합니다.
-                단순한 프로토타입이 아니라, 온프레미스 서버에서 동작하는 RAG 챗봇,
-                도메인 법령을 탐색하는 GraphRAG, 특화 데이터로 파인튜닝한 sLLM까지.
-                문제를 정의하고, 기술을 선택하고, 작동하는 시스템을 납품합니다.
+                도메인에 대한 이해를 바탕으로 AI 서비스의 방향을 기획하고,
+                필요한 데이터 구조와 시스템 아키텍처를 설계합니다.
+                RAG, Agent, LLMOps 같은 기술을 목적에 맞게 조합해
+                아이디어가 실제 사용자 흐름 안에서 작동하는 서비스가 되도록 개발합니다.
               </p>
 
               {/* Stats */}
